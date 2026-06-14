@@ -103,7 +103,7 @@
 (function(){
 'use strict';
 
-// ====== 视频数据 ======
+// ====== 视频原始全量备用数据 ======
 var VIDEO_DATA = {
   '首页': [
     {title:'撞见表妹洗澡强闯卫生间狂操',remark:'146111播放·16721评论',duration:'02-17'},
@@ -115,18 +115,71 @@ var VIDEO_DATA = {
     {title:'赵总寻欢05-09超级三飞',remark:'120播放·106449评论',duration:'12:39'},
     {title:'来姨妈的嫂子给我口交毒龙狐狸面具下骚态尽显',remark:'4播放·15965评论',duration:'2:11:22'},
     {title:'凡哥探花09-26城中村的小按摩店',remark:'71播放·67626评论',duration:'40:04'},
-    ],
+    {title:'老婆骚逼被单男内射满5次还想要',remark:'138播放·250120评论',duration:'31:44'},
+    {title:'今天约了一个高颜值的小妹妹卡尔',remark:'152播放·228068评论',duration:'47:22'},
+    {title:'家庭网络摄像头破解偷拍健身教练',remark:'125播放·208598评论',duration:'18:37'},
+    {title:'看单男内射老婆老公在旁边撸管然后刷锅丝袜小淫妻',remark:'97播放·200318评论',duration:'14:50'},
+    {title:'神似张绍涵喷水实战深入快热',remark:'105播放·185875评论',duration:'23:52'},
+    {title:'偷拍女儿洗澡等她睡着在玩她小嫩穴配了也不敢反抗',remark:'97播放·183307评论',duration:'28:24'},
+    {title:'今天这位老师是本人学外语生涯以来最骚的不为赚钱俄国侯总',remark:'129播放·171248评论',duration:'1:04:04'},
+    {title:'路边搭讪极品混血妹带回家干到她高潮喷水不止李微微',remark:'56播放·154076评论',duration:'27:27'},
+    {title:'我的双面宝贝被她强压硬上之后爽到换我狠操干死她part2宽哥',remark:'298播放·440924评论',duration:'37:05'},
+    {title:'麻将桌上钓到极品木瓜奶骚妇无套中出奶浪翻滚',remark:'259播放·384670评论',duration:'06-03'},
+    {title:'麻豆珍藏母子乱伦免费黄片651.gg',remark:'热门频道',duration:''}
+  ],
   '日韩AV': [
+    {title:'骑兵破解MIDA-657地味眼镜巨乳的人妻介護士天宫花南',remark:'4播放·9324评论',duration:'2:42:56',epCount:24},
+    {title:'CMN-193爆乳箱入り娘の官能小説倒錯コスプレ令嬢M塚田詩織',remark:'1播放·1405评论',duration:'1:58:55',epCount:12},
+    {title:'FC2PPV-4428531处子双飞首播高潮不止',remark:'1播放·8449评论',duration:'2:19:16',epCount:1},
+    {title:'NTRH-019夜校上课的人妻NTR第2次被侵犯却无法忘怀的绝顶快感雨宫彩花',remark:'22播放·52358评论',duration:'2:01:46',epCount:1},
+    {title:'NEWM-040嫁の母と禁断性交其の参拾壱妻よりもお義母さんの方がいいよ…小早川怜子',remark:'1播放·8516评论',duration:'2:00:21',epCount:1},
+    {title:'HUNTC-438某私立女子学校的家长主办的妈妈们咖啡厅',remark:'21播放·53940评论',duration:'2:14:32',epCount:1},
+    {title:'ALDN-527今从妻を献上します…第一次浮気をして帰ってきます…伊東沙蘭',remark:'9播放·13628评论',duration:'2:27:29',epCount:1},
+    {title:'ADN-649唾液が混じり合う密室接吻社長室実浜みき',remark:'16播放·22841评论',duration:'2:17:43',epCount:1},
     {title:'骑兵破解ADN-758大好きな幼なじみが僕の父親に抱かれていた…白石なぎさ',remark:'0播放·397评论',duration:'1:56:29',epCount:1},
     {title:'骑兵破解BAHP-016ヤれるコ～幼少期から知ってる友人の妹が大人の女になったとき～加瀬ななほ',remark:'0播放·124评论',duration:'2:19:05',epCount:1},
     {title:'骑兵破解DIPO-060マル秘隠し撮り映像流出！！中年おやじが隠し撮りした人妻との秘め事',remark:'0播放·241评论',duration:'2:59:48',epCount:1},
     {title:'骑兵破解FSDSS-161バカメス洗脳女教師河南実里',remark:'0播放·150评论',duration:'2:01:15',epCount:1},
     {title:'骑兵破解GQE-112GLORYQUEST2020上半期総集編109タイトルSPECIAL',remark:'1播放·409评论',duration:'8:00:56',epCount:1},
-    {title:'骑兵破解HBAD-734ーパンノーブラで誘惑してくる小野坂ゆいか',remark:'0播放·347评论',duration:'2:10:20',epCount:1},
+    {title:'骑兵破解HBAD-734お隣に住む美人でエロボディのお姉さんがノーパンノーブラで誘惑してくる小野坂ゆいか',remark:'0播放·347评论',duration:'2:10:20',epCount:1},
     {title:'骑兵破解JURA-196初撮り人妻ドキュメント第二章桃井葵',remark:'0播放·268评论',duration:'2:01:51',epCount:1},
-    {title:'骑兵破解MIAA-499PART3',remark:'0播放·337评论',duration:'3:09:08',epCount:1},
+    {title:'骑兵破解MIAA-499マッサージで勃起した先っぽにアソコを押し当てて布越し2cm挿入で誘惑する確信犯エステティシャンPART3',remark:'0播放·337评论',duration:'3:09:08',epCount:1},
     {title:'骑兵破解MIAA-679どっちが一番スキか2秒で決めてッ',remark:'1播放·373评论',duration:'3:06:57',epCount:1},
-   ],
+    {title:'骑兵破解MXGS-1184絡み合う体液～濃厚接吻互いに求め合う密着中出しセックス若宮穂乃',remark:'1播放·207评论',duration:'2:19:07',epCount:1},
+    {title:'骑兵破解OVG-144本番禁止のデリヘルでヌルッと生挿入する悪質客の実態2',remark:'0播放·129评论',duration:'2:14:55',epCount:1},
+    {title:'骑兵破解OYC-292友達と飲み会後、終電を逃して家に泊めた親友の彼女',remark:'1播放·143评论',duration:'3:21:41',epCount:1},
+    {title:'骑兵破解YST-353下品だとか上品だとか関係なく、エグイくらい湊さんを弄びたい湊波流',remark:'0播放·298评论',duration:'1:42:40',epCount:1},
+    {title:'骑兵破解YSN-660妹のやべーカラダを貪りたい湊波流',remark:'0播放·152评论',duration:'1:46:23',epCount:1},
+    {title:'骑兵破解YSN-659妹を育成中～両親も知らない間に妹を肉オナホに育成した俺は変態ですか？尋井うみ',remark:'2播放·287评论',duration:'1:39:43',epCount:1},
+    {title:'骑兵破解YMDS-290裏風俗学園祭エロかわ巨乳女子○生の密着ご奉仕ソーププレイ桜ゆの',remark:'0播放·195评论',duration:'2:33:34',epCount:1},
+    {title:'骑兵破解YMDS-289裏風俗学園祭エロかわ巨乳女子○生の密着ご奉仕ソーププレイ糸井瑠花',remark:'0播放·221评论',duration:'2:25:05',epCount:1},
+    {title:'骑兵破解YMDS-286マチアプ生ナカちゃん！外見ハデでも本質ピュア',remark:'0播放·75评论',duration:'1:23:04',epCount:1},
+    {title:'骑兵破解YMDS-285マチアプ生ナカちゃん！外見ハデでも本質ピュア',remark:'0播放·90评论',duration:'1:20:55',epCount:1},
+    {title:'骑兵破解YMDS-284ヤリマンワゴンが行く！！ハプニングアゴーゴー',remark:'1播放·199评论',duration:'1:45:52',epCount:1},
+    {title:'骑兵破解YMDS-283ヤリマンワゴンが行く！！ハプニングアゴーゴー',remark:'1播放·368评论',duration:'2:02:39',epCount:1},
+    {title:'骑兵破解WAAA-130コンドームが破れてまさかの生ハメ！',remark:'0播放·116评论',duration:'2:35:35',epCount:1},
+    {title:'骑兵破解WAAA-090隣のゴミ部屋に監禁された制服少女は絶倫オヤジの精液ぶっかけ種付けレ×プで汚されてイク…東條なつ',remark:'0播放·275评论',duration:'2:29:28',epCount:1},
+    {title:'骑兵破解VOSS-165隣人がまさかのヤリマン巨乳未亡人！',remark:'0播放·347评论',duration:'1:34:14',epCount:1},
+    {title:'骑兵破解VNDS-3305泥酔した年増おばさんを連れ込んだら…',remark:'0播放·171评论',duration:'2:00:04',epCount:1},
+    {title:'骑兵破解VNDS-3295隣に住む奥さんがウチの玄関前で泥酔×パンツ丸見えで爆睡中…なので自宅に連れ込んじゃいました！3',remark:'0播放·451评论',duration:'1:39:10',epCount:1},
+    {title:'骑兵破解VNDS-3293働くレディーを狙え職場で口説き人妻ナンパ',remark:'0播放·359评论',duration:'1:58:39',epCount:1},
+    {title:'骑兵破解VENX-046もう息子なしでは生きていけない…。母親が絶頂50回突破するエロス極限トランス中出し君島みお',remark:'1播放·514评论',duration:'1:39:17',epCount:1},
+    {title:'骑兵破解VENX-024親族相姦きれいな叔母さん志木あかね',remark:'0播放·252评论',duration:'1:51:22',epCount:1},
+    {title:'骑兵破解VENU-968親族相姦きれいな叔母さん清宮飛鳥',remark:'1播放·359评论',duration:'1:39:47',epCount:1},
+    {title:'骑兵破解VENU-945親族相姦きれいな叔母さん彩乃らん',remark:'1播放·250评论',duration:'1:39:47',epCount:1},
+    {title:'骑兵破解VEMA-165性格良すぎて中出ししても怒らない地味子OL芹奈さんは隠れ大巨乳の淫キャ妻芹奈りく',remark:'1播放·230评论',duration:'1:36:18',epCount:1},
+    {title:'骑兵破解VEC-472母の親友松本菜奈実',remark:'0播放·169评论',duration:'1:47:13',epCount:1},
+    {title:'骑兵破解VAGU-225超高級中出し専門熟女ソープでこっそり働く嫁の母「家族のみんなには内緒にしてね…」藤白桃羽',remark:'0播放·347评论',duration:'1:52:22',epCount:1},
+    {title:'骑兵破解VAGU-208超優良！生ハメしまくり熟女おっパブ滝川恵理',remark:'0播放·321评论',duration:'1:25:56',epCount:1},
+    {title:'骑兵破解VAGU-207近親相姦中出しソープ初めての熟女風俗、指名したら母ちゃんだった片瀬仁美',remark:'0播放·369评论',duration:'1:37:28',epCount:1},
+    {title:'骑兵破解URPW-040【着衣爆乳】思わずRECしたくなる着衣爆乳おっぱいもなみ',remark:'0播放·178评论',duration:'2:29:21',epCount:1},
+    {title:'骑兵破解SY-223前略四畳半の奥様久美子さん30歳素人四畳半生中出しシリーズ藤川乃風',remark:'0播放·205评论',duration:'2:03:26',epCount:1},
+    {title:'骑兵破解SVDVD-896クリスマスイブに道で寝ていた泥●女を持ち帰ったらとんでもない酒淫乱で友達10人と3日3晩ハメまくった皇ゆず',remark:'0播放·190评论',duration:'3:21:46',epCount:1},
+    {title:'BRAZZERS2023-08-15狡猾的熟女勾引男朋友',remark:'0播放·294评论',duration:'29:46',epCount:1},
+    {title:'BRAZZERS2023-08-15闪烁的半兽人的第一次肛交',remark:'0播放·179评论',duration:'42:43',epCount:1},
+    {title:'ADN-514一個人住的麗人-妃光莉',remark:'43播放·70914评论',duration:'2:11:22',epCount:1},
+    {title:'TOTK-011白濁汁強●大量ぶっかけ＆ごっくん！アナルFUCK調教鞠るり',remark:'2播放·5098评论',duration:'2:08:28',epCount:1}
+  ],
   '国产系列': [
     {title:'撞见表妹洗澡强闯卫生间狂操',remark:'146111播放·16721评论',duration:'02-17'},
     {title:'全国空降随时可约随地可啪',remark:'111播放·22445评论',duration:'02-17'},
@@ -137,14 +190,17 @@ var VIDEO_DATA = {
     {title:'赵总寻欢05-09超级三飞',remark:'120播放·106449评论',duration:'12:39'},
     {title:'来姨妈的嫂子给我口交毒龙狐狸面具下骚态尽显',remark:'4播放·15965评论',duration:'2:11:22'},
     {title:'凡哥探花09-26城中村的小按摩店',remark:'71播放·67626评论',duration:'40:04'},
-     ],
+    {title:'老婆骚逼被单男内射满5次还想要',remark:'138播放·250120评论',duration:'31:44'},
+    {title:'今天约了一个高颜值的小妹妹卡尔',remark:'152播放·228068评论',duration:'47:22'},
+    {title:'家庭网络摄像头破解偷拍健身教练和美女学员',remark:'125播放·208598评论',duration:'18:37'}
+  ],
   '欧美': [
     {title:'BRAZZERS2023-08-15狡猾的熟女勾引男朋友',remark:'0播放·294评论',duration:'29:46',epCount:1},
     {title:'BRAZZERS2023-08-15闪烁的半兽人的第一次肛交',remark:'0播放·179评论',duration:'42:43',epCount:1},
     {title:'NUBILEFILMS2019-11-15电臀舞阳具挑战第5季第12集',remark:'0播放·1072评论',duration:'19:16',epCount:12},
     {title:'FC2PPV-3187561女大学生遭三调教内外尽湿',remark:'2播放·9697评论',duration:'20:49',epCount:1},
     {title:'SA国际传媒SATM009极品校花为钱甘愿帮富豪代孕',remark:'12播放·23684评论',duration:'22:20',epCount:1},
-    {title:'骑兵破解GQE-112GLORYQUEST2020上半期総集編109タイトルSPECIAL',remark:'1播放·409评论',duration:'8:00:56',epCount:1},
+    {title:'骑兵破解GQE-112GLORYQUEST2020上半期総集編109タイトルSPECIAL',remark:'1播放·409评论',duration:'8:00:56',epCount:1}
   ],
   '成人动漫': [
     {title:'261动漫剧情',remark:'热门频道',duration:''},
@@ -153,7 +209,7 @@ var VIDEO_DATA = {
     {title:'骑兵破解YMDS-286マチアプ生ナカちゃん！外見ハデ',remark:'0播放·75评论',duration:'1:23:04',epCount:1},
     {title:'骑兵破解YMDS-285マチアプ生ナカちゃん！外見ハデ',remark:'0播放·90评论',duration:'1:20:55',epCount:1},
     {title:'骑兵破解YMDS-284ヤリマンワゴンが行く！！',remark:'1播放·199评论',duration:'1:45:52',epCount:1},
-    {title:'骑兵破解YMDS-283ヤリマンワゴンが行く！！',remark:'1播放·368评论',duration:'2:02:39',epCount:1},
+    {title:'骑兵破解YMDS-283ヤリマンワゴンが行く！！',remark:'1播放·368评论',duration:'2:02:39',epCount:1}
   ],
   '无码中文字幕': [
     {title:'4721无码中文字幕',remark:'热门频道',duration:''},
@@ -161,13 +217,13 @@ var VIDEO_DATA = {
     {title:'骑兵破解MIAA-679どっちが一番スキか2秒で決めてッ',remark:'1播放·373评论',duration:'3:06:57',epCount:1},
     {title:'骑兵破解MXGS-1184絡み合う体液～濃厚接吻',remark:'1播放·207评论',duration:'2:19:07',epCount:1},
     {title:'骑兵破解OVG-144本番禁止のデリヘルでヌルッと生挿入',remark:'0播放·129评论',duration:'2:14:55',epCount:1},
-    {title:'骑兵破解OYC-292友達と飲み会後、終電を逃して',remark:'1播放·143评论',duration:'3:21:41',epCount:1},
+    {title:'骑兵破解OYC-292友達と飲み会後、終電を逃して',remark:'1播放·143评论',duration:'3:21:41',epCount:1}
   ],
   '有码中文字幕': [
     {title:'34646有码中文字幕',remark:'热门频道',duration:''},
     {title:'CMN-193爆乳箱入り娘の官能小説倒錯コスプレ令嬢',remark:'1播放·1405评论',duration:'1:58:55',epCount:12},
     {title:'ADN-514一個人住的麗人-妃光莉',remark:'43播放·70914评论',duration:'2:08:28',epCount:1},
-    {title:'TOTK-011白濁汁強●大量ぶっかけ＆ごっくん！',remark:'2播放·5098评论',duration:'2:08:28',epCount:1},
+    {title:'TOTK-011白濁汁強●大量ぶっかけ＆ごっくん！',remark:'2播放·5098评论',duration:'2:08:28',epCount:1}
   ],
   '日本无码': [
     {title:'14805日本无码',remark:'热门频道',duration:''},
@@ -175,7 +231,7 @@ var VIDEO_DATA = {
     {title:'骑兵破解YSN-660妹のやべーカラダを貪りたい',remark:'0播放·152评论',duration:'1:46:23',epCount:1},
     {title:'骑兵破解YSN-659妹を育成中～両親も知らない間に',remark:'2播放·287评论',duration:'1:39:43',epCount:1},
     {title:'骑兵破解VOSS-165隣人がまさかのヤリマン巨乳未亡人',remark:'0播放·347评论',duration:'1:34:14',epCount:1},
-    {title:'骑兵破解VNDS-3305泥酔した年増おばさんを連れ込んだら',remark:'0播放·171评论',duration:'2:00:04',epCount:1},
+    {title:'骑兵破解VNDS-3305泥酔した年増おばさんを連れ込んだら',remark:'0播放·171评论',duration:'2:00:04',epCount:1}
   ],
   '日本有码': [
     {title:'63709日本有码',remark:'热门频道',duration:''},
@@ -183,7 +239,7 @@ var VIDEO_DATA = {
     {title:'骑兵破解JURA-196初撮り人妻ドキュメント第二章',remark:'0播放·268评论',duration:'2:01:51',epCount:1},
     {title:'骑兵破解MIAA-499マッサージで勃起した先っぽに',remark:'0播放·337评论',duration:'3:09:08',epCount:1},
     {title:'骑兵破解VENX-046もう息子なしでは生きていけない',remark:'1播放·514评论',duration:'1:39:17',epCount:1},
-    {title:'骑兵破解VENU-968親族相姦きれいな叔母さん',remark:'1播放·359评论',duration:'1:39:47',epCount:1},
+    {title:'骑兵破解VENU-968親族相姦きれいな叔母さん',remark:'1播放·359评论',duration:'1:39:47',epCount:1}
   ],
   '骑兵破解': [
     {title:'骑兵破解MIDA-657地味眼镜巨乳的人妻介護士',remark:'4播放·9324评论',duration:'2:42:56',epCount:24},
@@ -195,17 +251,23 @@ var VIDEO_DATA = {
     {title:'骑兵破解HBAD-734お隣に住む美人でエロボディのお姉さん',remark:'0播放·347评论',duration:'2:10:20',epCount:1},
     {title:'骑兵破解JURA-196初撮り人妻ドキュメント第二章',remark:'0播放·268评论',duration:'2:01:51',epCount:1},
     {title:'骑兵破解MIAA-499マッサージで勃起した先っぽに',remark:'0播放·337评论',duration:'3:09:08',epCount:1},
-     ],
+    {title:'骑兵破解MIAA-679どっちが一番スキか2秒で決めてッ',remark:'1播放·373评论',duration:'3:06:57',epCount:1},
+    {title:'骑兵破解MXGS-1184絡み合う体液～濃厚接吻',remark:'1播放·207评论',duration:'2:19:07',epCount:1},
+    {title:'骑兵破解OVG-144本番禁止のデリヘルでヌルッと生挿入',remark:'0播放·129评论',duration:'2:14:55',epCount:1}
+  ],
   '国产视频': [
+    {title:'41473国产视频',remark:'热门频道',duration:''},
     {title:'撞见表妹洗澡强闯卫生间狂操',remark:'146111播放·16721评论',duration:'02-17'},
     {title:'全国空降随时可约随地可啪',remark:'111播放·22445评论',duration:'02-17'},
     {title:'在线选妃海量美女帝王享受',remark:'111播放·88222评论',duration:'02-17'},
     {title:'趁老婆做饭爆操丈母娘',remark:'2541播放·334442评论',duration:'05-22'},
     {title:'骚妈勾引我强上妈妈教我如何性爱',remark:'1124播放·222221评论',duration:'05-22'},
     {title:'高中少女与男友啪啪手持相机拍摄性爱流出',remark:'829播放·760594评论',duration:'1080p'},
+    {title:'赵总寻欢05-09超级三飞',remark:'120播放·106449评论',duration:'12:39'},
+    {title:'凡哥探花09-26城中村的小按摩店',remark:'71播放·67626评论',duration:'40:04'},
     {title:'老婆骚逼被单男内射满5次还想要到底还有没有人能满足她',remark:'138播放·250120评论',duration:'31:44'},
     {title:'今天约了一个高颜值的小妹妹卡尔',remark:'152播放·228068评论',duration:'47:22'},
-    {title:'家庭网络摄像头破解偷拍健身教练和美女学员家中啪啪',remark:'125播放·208598评论',duration:'18:37'},
+    {title:'家庭网络摄像头破解偷拍健身教练和美女学员家中啪啪',remark:'125播放·208598评论',duration:'18:37'}
   ],
   '欧美高清': [
     {title:'20625欧美高清',remark:'热门频道',duration:''},
@@ -213,8 +275,8 @@ var VIDEO_DATA = {
     {title:'BRAZZERS2023-08-15闪烁的半兽人的第一次肛交',remark:'0播放·179评论',duration:'42:43',epCount:1},
     {title:'NUBILEFILMS2019-11-15电臀舞阳具挑战第5季',remark:'0播放·1072评论',duration:'19:16',epCount:12},
     {title:'FC2PPV-3187561女大学生遭三调教内外尽湿',remark:'2播放·9697评论',duration:'20:49',epCount:1},
-    {title:'SA国际传媒SATM009极品校花为钱甘愿帮富豪代孕',remark:'12播放·23684评论',duration:'22:20',epCount:1},
-  ],
+    {title:'SA国际传媒SATM009极品校花为钱甘愿帮富豪代孕',remark:'12播放·23684评论',duration:'22:20',epCount:1}
+  ]
 };
 
 var CATS = Object.keys(VIDEO_DATA);
@@ -235,18 +297,22 @@ var CAT_URLS = {
 var currentCat = '首页';
 var lastFocus = null;
 
-// DOM helpers
+// === 无限滚动翻页参数 ===
+var pageInfo = { next: '' };
+var isLoadingMore = false;
+var hasMore = true;
+
 var $ = function(s){return document.querySelector(s);};
 var content = $('#content');
 var status = $('#status');
 var tabs = $('#tabs');
 
-// 工具函数 - 用文本节点安全插入
 function escText(s){return String(s||'');}
-//http://hsck.tv/
-//http://hsck.cc/
-//http://hsck.net/
-var SITE = 'http://555162.xyz/';
+
+// =================【配置与动态寻址】=================
+var ENTRY_URL = 'http://hscangku.com';   // 固定入口页
+var FALLBACK_SITE = 'http://789067.xyz'; // 兜底域名
+var SITE = '';                           // 初始为空，等待动态挂载
 var UA = 'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/120 Mobile Safari/537.36';
 
 function _fm(timeout){
@@ -263,6 +329,73 @@ function _fm(timeout){
 
 if(window.fongmiBridge || window.fm || window.fongmi) document.documentElement.classList.add('fm-native');
 window.addEventListener('fmsdk',function(){document.documentElement.classList.add('fm-native');});
+
+async function initDynamicSite() {
+  status.textContent = '正在请求固定入口页获取最新节点...';
+  try {
+    var f_init = await _fm(1500);
+    var entryHtml = '';
+    
+    if (f_init && f_init.req) {
+      var r_init = await f_init.req(ENTRY_URL, { method: 'GET', headers: { 'User-Agent': UA }, responseType: 'text' });
+      entryHtml = r_init.body || '';
+    } else {
+      var res_init = await fetch(ENTRY_URL, { headers: { 'User-Agent': UA } });
+      entryHtml = await res_init.text();
+    }
+    
+    var strUMatch = entryHtml.match(/strU\s*=\s*["']([^"']+)["']/i);
+    if (!strUMatch) throw new Error('未能匹配到 strU 变量');
+    
+    var strU = strUMatch[1];
+    var testUrl = strU;
+    
+    if (strU.indexOf('?u=') > -1) {
+      if (strU.endsWith('?u=')) {
+        testUrl = strU + encodeURIComponent(ENTRY_URL) + '&p=/';
+      } else {
+        testUrl = strU + '&p=/';
+      }
+    } else if (!/^http/i.test(strU)) {
+      testUrl = ENTRY_URL + (strU.startsWith('/') ? '' : '/') + strU;
+    }
+
+    status.textContent = '穿透网关中，追踪真实落地页...';
+    var finalHost = null;
+
+    if (f_init && f_init.req) {
+      var r = await f_init.req(testUrl, { method: 'GET', headers: { 'User-Agent': UA }, responseType: 'text' });
+      var html = r.body || '';
+      var jsMatch = html.match(/location\.href\s*=\s*["']([^"']+)["']/i);
+      if (jsMatch) {
+        finalHost = jsMatch[1].match(/^(https?:\/\/[^\/]+)/i)[1];
+      } else if (r.url) { 
+        finalHost = r.url.match(/^(https?:\/\/[^\/]+)/i)[1];
+      }
+    } else {
+      var res = await fetch(testUrl, { headers: { 'User-Agent': UA } });
+      var html = await res.text();
+      var jsMatch = html.match(/location\.href\s*=\s*["']([^"']+)["']/i);
+      if (jsMatch) {
+        finalHost = jsMatch[1].match(/^(https?:\/\/[^\/]+)/i)[1];
+      } else if (res.url) {
+        finalHost = res.url.match(/^(https?:\/\/[^\/]+)/i)[1];
+      }
+    }
+
+    if (finalHost && finalHost.indexOf('hk234') === -1) {
+      SITE = finalHost.replace(/\/$/, '');
+    } else {
+      var urlObj = new URL(testUrl);
+      SITE = urlObj.protocol + '//' + urlObj.host;
+    }
+    
+  } catch (e) {
+    console.error('动态寻址失败:', e);
+    SITE = FALLBACK_SITE;
+  }
+  return SITE;
+}
 
 function fixUrl(u){
   u=String(u||'').trim();
@@ -281,7 +414,7 @@ function _img(u){
 
 function _req(url, referer){
   url=fixUrl(url);
-  referer = referer || (SITE + '/');
+  referer = referer || (SITE ? SITE + '/' : '');
   return _fm(1800).then(function(f){
     if(f && f.req){
       return f.req(url,{method:'GET',headers:{'User-Agent':UA,'Referer':referer},responseType:'text',timeout:30,credentials:'include'}).then(function(r){
@@ -313,6 +446,24 @@ function parseRealHome(html){
     if(title && playUrl){ arr.push({title:title,remark:remark,duration:duration,img:fixUrl(img),playUrl:playUrl,epCount:1}); }
   }
   return arr;
+}
+
+// === 分页器解析 ===
+function parsePager(html) {
+  var doc = new DOMParser().parseFromString(html, 'text/html');
+  var nextUrl = '';
+  var links = doc.querySelectorAll('a');
+  for (var i = 0; i < links.length; i++) {
+    var txt = links[i].textContent.trim();
+    if (txt === '下一页' || txt === '下页' || txt === '>>') {
+      var href = links[i].getAttribute('href');
+      if (href && href !== 'javascript:;' && href !== '#') {
+        nextUrl = fixUrl(href);
+        break;
+      }
+    }
+  }
+  return { next: nextUrl };
 }
 
 function loadRealHome(){
@@ -415,15 +566,29 @@ function makeCard(item, posterCanvas) {
   return card;
 }
 
+// === 修改：加载分类时重置翻页状态并监听滚动 ===
 function loadCat(catName){
   currentCat = catName;
   renderTabs(catName);
   content.innerHTML = '<div class="empty loading">正在加载「' + catName + '」...</div>';
   var url = CAT_URLS[catName] || '/';
+  
+  // 重置分页状态
+  pageInfo = { next: '' };
+  isLoadingMore = false;
+  hasMore = true;
+  window.removeEventListener('scroll', handleScroll);
+
   _req(url).then(function(html){
     var real = parseRealHome(html);
+    pageInfo = parsePager(html); // 提取下一页链接
+    
     if(real.length){ VIDEO_DATA[catName] = real; }
     renderCatItems(catName, VIDEO_DATA[catName] || []);
+    
+    // 如果存在下一页，开启滚动监听
+    if (pageInfo.next) window.addEventListener('scroll', handleScroll);
+    
   }).catch(function(e){
     renderCatItems(catName, VIDEO_DATA[catName] || []);
     status.textContent = '真实分类加载失败，已显示备用数据：' + (e.message || e);
@@ -451,9 +616,36 @@ function renderCatItems(catName, allItems){
   for (var i = 0; i < allItems.length; i++) grid.appendChild(makeCard(allItems[i], posterCanvas));
   sec.appendChild(grid);
   content.appendChild(sec);
-  status.textContent = '已加载「' + catName + '」共' + allItems.length + '条';
+  status.textContent = '已加载「' + catName + '」共 ' + allItems.length + ' 条';
 }
 
+function escAttr(s){
+  return String(s||'').split('"').join('&#34;').replace(/'/g,'&#39;');
+}
+
+function findItemByTitle(title){
+  var allItems = [];
+  for(var c=0;c<CATS.length;c++){
+    var arr=VIDEO_DATA[CATS[c]]||[];
+    for(var i=0;i<arr.length;i++){ allItems.push(arr[i]); }
+  }
+  var searchResults = VIDEO_DATA['搜索结果'] || [];
+  for(var j=0;j<searchResults.length;j++){ allItems.push(searchResults[j]); }
+  
+  for(var k=0;k<allItems.length;k++){
+    if(allItems[k].title === title) return allItems[k];
+  }
+  return null;
+}
+
+function getPlayUrl(title, epNum){
+  var item=findItemByTitle(title);
+  if(item && item.playUrl){ return item.playUrl; }
+  var BASE = SITE;
+  return BASE + '/vodsearch/-------------.html?wd=' + encodeURIComponent(title.replace(/^骑兵破解/, '').slice(0,40));
+}
+
+// =================【整合：详情面板与事件注入】=================
 function openDetailByTitle(title){
   lastFocus = document.activeElement;
   document.body.classList.add('detail-active');
@@ -461,8 +653,6 @@ function openDetailByTitle(title){
   history.pushState({detailOpen: true}, '', '#detail');
   
   var videoItem = null;
-  
-  // 1. 先在普通分类中查找
   for (var i = 0; i < CATS.length; i++) {
     var items = VIDEO_DATA[CATS[i]];
     for (var j = 0; j < items.length; j++) {
@@ -471,15 +661,11 @@ function openDetailByTitle(title){
     if (videoItem) break;
   }
   
-  // 2. ✅ 如果没找到，去搜索结果中查找（这是新增的）
   if (!videoItem) {
     var searchItems = VIDEO_DATA['搜索结果'];
     if (searchItems) {
       for (var k = 0; k < searchItems.length; k++) {
-        if (searchItems[k].title === title) {
-          videoItem = searchItems[k];
-          break;
-        }
+        if (searchItems[k].title === title) { videoItem = searchItems[k]; break; }
       }
     }
   }
@@ -509,6 +695,7 @@ function openDetailByTitle(title){
   html += '<div class="play-title">播放线路</div>';
   html += '<div class="line-tabs"><button class="line-tab focusable active" data-sid="1">默认线路</button></div>';
   html += '<div class="episodes" id="episodeBox">';
+  
   if (epCount > 1) {
     for (var k = 1; k <= epCount; k++) {
       html += '<button class="ep focusable" data-action="ep" data-title="' + k + '">第' + k + '集</button>';
@@ -520,69 +707,30 @@ function openDetailByTitle(title){
   panel.innerHTML = html;
   
   $('#closeDetail').onclick = closeDetail;
+  
+  // 将剧集列表组装并传递给底层进行无缝连播注入
   document.getElementById('episodeBox').querySelectorAll('.ep').forEach(function(btn) {
     btn.onclick = function() {
       var action = this.getAttribute('data-action');
-      if (action === 'play') {
-        playSingle(this.getAttribute('data-title'));
+      var epNumStr = this.getAttribute('data-title') || '1';
+      
+      var allEps = [];
+      if (epCount > 1) {
+        for (var n = 1; n <= epCount; n++) {
+          allEps.push({ name: '第' + n + '集', url: getPlayUrl(title, n) });
+        }
       } else {
-        playEpisode(this.getAttribute('data-title'), title);
+        allEps.push({ name: '正片', url: getPlayUrl(title, 1) });
       }
+
+      var epName = action === 'play' ? '正片' : '第' + epNumStr + '集';
+      var playPageUrl = getPlayUrl(title, action === 'play' ? 1 : parseInt(epNumStr, 10));
+
+      doPlay(playPageUrl, title, epName, videoItem, allEps);
     };
   });
-  $('#closeDetail').focus({preventScroll:true});
-}
-
-function escAttr(s){
-  return String(s||'').split('"').join('&#34;').replace(/'/g,'&#39;');
-}
-
-function playSingle(title){
-  var url = getPlayUrl(title, 1);
-  doPlay(url, title);
-}
-
-function playEpisode(epNum, title){
-  var url = getPlayUrl(title, epNum);
-  doPlay(url, title + ' 第' + epNum + '集');
-}
-
-function findItemByTitle(title){
-  // 合并所有数据源
-  var allItems = [];
-  for(var c=0;c<CATS.length;c++){
-    var arr=VIDEO_DATA[CATS[c]]||[];
-    for(var i=0;i<arr.length;i++){ allItems.push(arr[i]); }
-  }
-  // 加上搜索结果
-  var searchResults = VIDEO_DATA['搜索结果'] || [];
-  for(var j=0;j<searchResults.length;j++){ allItems.push(searchResults[j]); }
   
-  // 查找匹配的标题
-  for(var k=0;k<allItems.length;k++){
-    if(allItems[k].title === title) return allItems[k];
-  }
-  return null;
-}
-
-function getPlayUrl(title, epNum){
-  var item=findItemByTitle(title);
-  if(item && item.playUrl){ return item.playUrl; }
-  var BASE = SITE;
-  var map = [
-    ['老婆骚逼被单男内射满5次还想要','/vodplay/200383-1-1.html'],
-    ['今天约了一个高颜值的小妹妹','/vodplay/200357-1-1.html'],
-    ['偷拍女儿洗澡','/vodplay/200359-1-1.html'],
-    ['我的双面宝贝','/vodplay/199174-1-1.html']
-  ];
-  for(var i=0;i<map.length;i++){
-    if(title.indexOf(map[i][0]) >= 0){
-      var path = map[i][1];
-      if(epNum && epNum > 1){ path = path.replace(/-1-1\.html$/, '-1-' + epNum + '.html'); }
-      return BASE + path;
-    }
-  }
-  return BASE + '/vodsearch/-------------.html?wd=' + encodeURIComponent(title.replace(/^骑兵破解/, '').slice(0,40));
+  $('#closeDetail').focus({preventScroll:true});
 }
 
 function extractIframeSrc(html){
@@ -615,50 +763,131 @@ function extractDirectVideoUrl(text){
   return '';
 }
 
-async function doPlay(playPageUrl, title){
+// =================【核心：MacCMS 零等待解析 + 完美选集注入 + 防误判拦截】=================
+async function doPlay(playPageUrl, title, epName, videoItem, allEps){
   playPageUrl = fixUrl(playPageUrl);
-  status.textContent = '正在解析播放源：' + title;
-  try{
+  status.textContent = '正在解析播放源：' + title + ' ' + epName;
+  
+  try {
     var f = await _fm(2000);
-    var playHtml = await _req(playPageUrl);
     var videoUrl = '';
-    var idm = playHtml.match(/var\s+VID\s*=\s*(\d+)\s*,\s*SID\s*=\s*(\d+)\s*,\s*NID\s*=\s*(\d+)/i);
-    if(idm){
-      try{
-        var dataText = await _req('/playdata.php?id=' + idm[1] + '&sid=' + idm[2] + '&nid=' + idm[3] + '&_=' + Date.now(), playPageUrl);
+    var iframeUrl = '';
+    var playHtml = '';
+    
+    var currentHost = SITE;
+    try { currentHost = new URL(playPageUrl).origin; } catch(e) {}
+    
+    var vid = '', sid = '', nid = '';
+    var urlMatch = playPageUrl.match(/\/(\d+)-(\d+)-(\d+)\.html/);
+    if (urlMatch) {
+      vid = urlMatch[1];
+      sid = urlMatch[2];
+      nid = urlMatch[3];
+    }
+    
+    if (vid && sid && nid) {
+      var dataUrl = currentHost + '/playdata.php?id=' + vid + '&sid=' + sid + '&nid=' + nid + '&_=' + Date.now();
+      try {
+        var dataText = await _req(dataUrl, playPageUrl);
         var data = JSON.parse(dataText);
-        if(data && data.ok && data.p && data.p.url){ videoUrl = data.p.url; }
-      }catch(e){}
+        if (data && data.ok && data.p && data.p.url) { 
+          videoUrl = data.p.url; 
+        }
+      } catch(e) {}
     }
-    if(!videoUrl) videoUrl = extractDirectVideoUrl(playHtml);
-    var iframeUrl = extractIframeSrc(playHtml);
-    if(!videoUrl && iframeUrl){
-      videoUrl = extractDirectVideoUrl(iframeUrl);
-      if(!videoUrl){
-        try{
-          var iframeHtml = await _req(iframeUrl);
-          videoUrl = extractDirectVideoUrl(iframeHtml);
-        }catch(e){}
+
+    if (!videoUrl) {
+      playHtml = await _req(playPageUrl);
+      var mJson = playHtml.match(/player_aaaa\s*=\s*(\{.+?\})/i);
+      if (mJson && !vid) {
+        try {
+          var pData = JSON.parse(mJson[1]);
+          if (pData.id && pData.sid && pData.nid) {
+            var dataUrl2 = currentHost + '/playdata.php?id=' + pData.id + '&sid=' + pData.sid + '&nid=' + pData.nid + '&_=' + Date.now();
+            var dataText2 = await _req(dataUrl2, playPageUrl);
+            var data2 = JSON.parse(dataText2);
+            if (data2 && data2.ok && data2.p && data2.p.url) videoUrl = data2.p.url;
+          }
+        } catch(e) {}
       }
-    }
-    if(f && f.play){
-      if(videoUrl){
-        status.textContent = '解析成功，正在播放：' + title;
-        try{
-          await f.play(videoUrl, title || '');
-          return;
-        }catch(e){
-          await f.play('push://' + playPageUrl, title || '');
-          return;
+      
+      if (!videoUrl) {
+        videoUrl = extractDirectVideoUrl(playHtml);
+        iframeUrl = extractIframeSrc(playHtml);
+        if (!videoUrl && iframeUrl) {
+          videoUrl = extractDirectVideoUrl(iframeUrl);
+          if (!videoUrl) {
+            try {
+              var iframeHtml = await _req(iframeUrl);
+              videoUrl = extractDirectVideoUrl(iframeHtml);
+            } catch(e) {}
+          }
         }
       }
-      status.textContent = '直链未解析，启动嗅探：' + title;
-      await f.play('push://' + (iframeUrl || playPageUrl), title || '');
+    }
+
+    var finalPlayUrl = videoUrl || iframeUrl || playPageUrl;
+
+    for (var i = 0; i < allEps.length; i++) {
+      if (allEps[i].name === epName && videoUrl) {
+        allEps[i].url = videoUrl;
+      }
+    }
+
+    function makeNativeUrl(u) {
+      if(u.indexOf('.m3u8') > -1 || u.indexOf('.mp4') > -1 || u.indexOf('.mkv') > -1) return u;
+      if(u.indexOf('video://') > -1 || u.indexOf('push://') > -1) return u;
+      return 'video://' + u; 
+    }
+
+    var currentNativeUrl = makeNativeUrl(finalPlayUrl);
+
+    var vod_play_url = allEps.map(function(e) {
+      return e.name + '$' + makeNativeUrl(e.url);
+    }).join('#');
+    
+    var nativeEps = allEps.map(function (e) {
+      return { name: e.name, url: makeNativeUrl(e.url) };
+    });
+
+    if (f && typeof f.vodInline === "function") {
+      status.textContent = '注入原生播放列表并拉起...';
+      var payload = {
+        vod_id: playPageUrl,
+        vod_name: title,
+        vod_pic: videoItem ? (_img(videoItem.img) || '') : '',
+        vod_play_from: '默认线路',
+        vod_play_url: vod_play_url,
+        play_from: '默认线路',
+        mark: epName,
+        episodes: nativeEps,
+        url: currentNativeUrl
+      };
+      await f.vodInline(payload);
       return;
     }
+
+    if (window.WebHome) {
+      status.textContent = '命中 WebHTV，尝试原生播放...';
+      var payload2 = {
+        url: currentNativeUrl,
+        name: title + " " + epName,
+        title: title,
+        parse: videoUrl ? 0 : 1
+      };
+      window.WebHome.invoke('player.playUrl', JSON.stringify(payload2));
+      return;
+    }
+
+    if (f && f.play) {
+      await f.play(currentNativeUrl, title + " " + epName);
+      return;
+    }
+    
     location.href = videoUrl || iframeUrl || playPageUrl;
-  }catch(e){
-    status.textContent = '播放解析失败，尝试打开原站：' + title;
+
+  } catch(e) {
+    status.textContent = '播放解析异常：' + e.message;
     location.href = playPageUrl;
   }
 }
@@ -667,18 +896,27 @@ function closeDetail(){
   document.body.classList.remove('detail-active');
   $('#detailSheet').classList.remove('active');
   if (lastFocus && lastFocus.focus) setTimeout(function(){lastFocus.focus({preventScroll:true});}, 50);
-  // 关键修复：返回后替换历史记录，避免再次后退退出
   history.replaceState(null, '', location.pathname + location.search);
 }
 
+// === 修改：加载搜索时重置翻页状态并监听滚动 ===
 function doSearch(q){
   q = q.replace(/\s+/g,' ').trim();
   if (!q) return;
   status.textContent = '搜索：' + q;
   content.innerHTML = '<div class="empty loading">搜索中...</div>';
   var url = '/vodsearch/-------------.html?wd=' + encodeURIComponent(q);
+  
+  currentCat = '搜索结果';
+  pageInfo = { next: '' };
+  isLoadingMore = false;
+  hasMore = true;
+  window.removeEventListener('scroll', handleScroll);
+
   _req(url).then(function(html){
     var results = parseRealHome(html);
+    pageInfo = parsePager(html); // 提取搜索结果下一页链接
+    
     if(!results.length){
       content.innerHTML = '<div class="empty">没有找到相关结果</div>';
       status.textContent = '无搜索结果：' + q;
@@ -687,9 +925,78 @@ function doSearch(q){
     VIDEO_DATA['搜索结果'] = results;
     renderCatItems('搜索：' + q, results);
     status.textContent = '搜索完成：' + q + '，找到 ' + results.length + ' 条';
+    
+    if (pageInfo.next) window.addEventListener('scroll', handleScroll);
+    
   }).catch(function(e){
     content.innerHTML = '<div class="empty">搜索失败：' + (e.message || e) + '</div>';
   });
+}
+
+// === 新增：滚动监听逻辑 ===
+function handleScroll() {
+  if (isLoadingMore || !hasMore || !pageInfo.next) return;
+  var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+  var clientHeight = document.documentElement.clientHeight;
+  
+  // 提前 300px 触发加载
+  if (scrollTop + clientHeight + 300 >= scrollHeight) {
+    loadMoreData();
+  }
+}
+
+// === 新增：请求并渲染下一页数据 ===
+async function loadMoreData() {
+  if (isLoadingMore || !hasMore || !pageInfo.next) return;
+  isLoadingMore = true;
+  
+  var loadingEl = document.createElement('div');
+  loadingEl.className = 'empty loading';
+  loadingEl.id = 'loadingMoreEl';
+  loadingEl.style.marginTop = '10px';
+  loadingEl.textContent = '正在加载下一页...';
+  content.appendChild(loadingEl);
+  
+  try {
+    var html = await _req(pageInfo.next);
+    var newItems = parseRealHome(html);
+    var newPageInfo = parsePager(html);
+    
+    var el = document.getElementById('loadingMoreEl');
+    if (el) el.remove();
+    
+    if (newItems.length === 0) {
+      hasMore = false;
+      content.insertAdjacentHTML('beforeend', '<div class="empty" style="margin-top:10px">已经到底了</div>');
+      return;
+    }
+    
+    // 把新请求到的视频卡片塞进当前网格
+    var grid = content.querySelector('.grid');
+    if (grid) {
+      var posterCanvas = document.createElement('canvas');
+      newItems.forEach(function(item) {
+        if (!VIDEO_DATA[currentCat]) VIDEO_DATA[currentCat] = [];
+        VIDEO_DATA[currentCat].push(item);
+        grid.appendChild(makeCard(item, posterCanvas));
+      });
+    }
+    
+    pageInfo = newPageInfo;
+    status.textContent = '已加载「' + currentCat + '」共 ' + VIDEO_DATA[currentCat].length + ' 条';
+    
+    if (!pageInfo.next) {
+      hasMore = false;
+      content.insertAdjacentHTML('beforeend', '<div class="empty" style="margin-top:10px">已经到底了</div>');
+    }
+  } catch(e) {
+    var el = document.getElementById('loadingMoreEl');
+    if (el) el.remove();
+    status.textContent = '加载下一页失败：' + (e.message || e);
+  } finally {
+    isLoadingMore = false;
+  }
 }
 
 $('#searchForm').onsubmit = function(e){
@@ -698,7 +1005,6 @@ $('#searchForm').onsubmit = function(e){
   if (q) doSearch(q);
 };
 
-// ========== 关键修复：键盘事件 ==========
 document.addEventListener('keydown', function(e){
   if (e.key === 'Escape' || e.key === 'Backspace') {
     if ($('#detailSheet').classList.contains('active')) { 
@@ -712,24 +1018,24 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-// ========== 关键修复：popstate 事件拦截手势返回 ==========
 window.addEventListener('popstate', function(e) {
   if ($('#detailSheet').classList.contains('active')) {
-    // 详情页打开时，拦截返回手势，先关闭详情页
     e.preventDefault();
     closeDetail();
-    // 重新添加一个历史记录，防止页面后退
     history.pushState(null, '', location.pathname + location.search);
   }
 });
 
-// ========== 关键修复：初始化时添加历史记录占位 ==========
-// 防止一打开APP就后退退出
+// =================【初始化入口】=================
 history.replaceState(null, '', location.pathname + location.search);
 history.pushState(null, '', location.pathname + location.search);
 
 renderTabs('首页');
-loadRealHome();
+
+initDynamicSite().then(function(realSite) {
+  console.log('✅ 成功接管！最终通信域名锁定为:', realSite);
+  loadRealHome();
+});
 
 })();
 </script>
