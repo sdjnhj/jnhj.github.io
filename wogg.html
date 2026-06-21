@@ -61,6 +61,115 @@ body.neon{
   --green-l1-rgb:180,120,255;
   --green-d1-rgb:90,30,180;
 }
+/* 琥珀金主题 */
+body.theme-amber{
+  --bg:#0d0c0a;
+  --soft-blur:rgba(20,17,12,.7);
+  --accent:#d4a048;
+  --accent2:#f0c878;
+  --accent-grad:linear-gradient(135deg,#d4a048,#f0c878);
+  --accent-rgb:212,160,72;
+  --accent2-rgb:240,200,120;
+  --accent-l1:#e0b060;
+  --accent-d1:#b07e2e;
+  --accent-d2:#b8862e;
+  --green:#42e88a;
+  --green-glow:0 0 14px rgba(66,232,138,.35);
+  --green-rgb:66,232,138;
+  --green-l1-rgb:120,255,170;
+  --green-d1-rgb:30,180,90;
+}
+/* 玫瑰金主题 */
+body.theme-rose{
+  --bg:#0d0a0b;
+  --soft-blur:rgba(20,14,14,.7);
+  --accent:#c16c63;
+  --accent2:#e0a08f;
+  --accent-grad:linear-gradient(135deg,#c16c63,#e0a08f);
+  --accent-rgb:193,108,99;
+  --accent2-rgb:224,160,143;
+  --accent-l1:#cc8278;
+  --accent-d1:#a3534a;
+  --accent-d2:#a85a4e;
+  --green:#42e88a;
+  --green-glow:0 0 14px rgba(66,232,138,.35);
+  --green-rgb:66,232,138;
+  --green-l1-rgb:120,255,170;
+  --green-d1-rgb:30,180,90;
+}
+/* 午夜蓝紫主题 */
+body.theme-indigo{
+  --bg:#0a0a14;
+  --soft-blur:rgba(14,14,28,.7);
+  --accent:#4a5a96;
+  --accent2:#8a6ad0;
+  --accent-grad:linear-gradient(135deg,#4a5a96,#8a6ad0);
+  --accent-rgb:74,90,150;
+  --accent2-rgb:138,106,208;
+  --accent-l1:#5f70ad;
+  --accent-d1:#37457a;
+  --accent-d2:#3b4a80;
+  --green:#42e88a;
+  --green-glow:0 0 14px rgba(66,232,138,.35);
+  --green-rgb:66,232,138;
+  --green-l1-rgb:120,255,170;
+  --green-d1-rgb:30,180,90;
+}
+/* 雾蓝青主题 */
+body.theme-teal{
+  --bg:#081012;
+  --soft-blur:rgba(10,22,24,.7);
+  --accent:#3c8c96;
+  --accent2:#7cc4cc;
+  --accent-grad:linear-gradient(135deg,#3c8c96,#7cc4cc);
+  --accent-rgb:60,140,150;
+  --accent2-rgb:124,196,204;
+  --accent-l1:#4fa3ad;
+  --accent-d1:#2c6e76;
+  --accent-d2:#2f757e;
+  --green:#d4a048;
+  --green-glow:0 0 14px rgba(212,160,72,.3);
+  --green-rgb:212,160,72;
+  --green-l1-rgb:240,200,120;
+  --green-d1-rgb:160,110,30;
+}
+/* 香槛灰金主题 */
+body.theme-sand{
+  --bg:#0c0b09;
+  --soft-blur:rgba(20,18,14,.7);
+  --accent:#96856a;
+  --accent2:#c2b294;
+  --accent-grad:linear-gradient(135deg,#96856a,#c2b294);
+  --accent-rgb:150,133,106;
+  --accent2-rgb:194,178,148;
+  --accent-l1:#a89878;
+  --accent-d1:#7d6e56;
+  --accent-d2:#82735a;
+  --green:#42e88a;
+  --green-glow:0 0 14px rgba(66,232,138,.35);
+  --green-rgb:66,232,138;
+  --green-l1-rgb:120,255,170;
+  --green-d1-rgb:30,180,90;
+}
+/* 墨绿主题 */
+body.theme-jade{
+  --bg:#080d0a;
+  --soft-blur:rgba(10,20,16,.7);
+  --accent:#3c6e5a;
+  --accent2:#7cbca0;
+  --accent-grad:linear-gradient(135deg,#3c6e5a,#7cbca0);
+  --accent-rgb:60,110,90;
+  --accent2-rgb:124,188,160;
+  --accent-l1:#4f8a72;
+  --accent-d1:#2c5444;
+  --accent-d2:#2f5947;
+  --green:#d4a048;
+  --green-glow:0 0 14px rgba(212,160,72,.3);
+  --green-rgb:212,160,72;
+  --green-l1-rgb:240,200,120;
+  --green-d1-rgb:160,110,30;
+}
+
 *{box-sizing:border-box;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 html,body{
   margin:0;min-height:100%;
@@ -207,10 +316,9 @@ html.search-focused .bar {
 /* ===== 搜索联想下拉：小海报 + 年份 ===== */
 .search-sugg{
   position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:60;
-  background:linear-gradient(160deg,rgba(30,38,50,.98),rgba(18,24,32,.98));
-  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
-  border:1px solid rgba(255,255,255,.12);
-  border-top:1px solid rgba(255,255,255,.18);
+  background:linear-gradient(150deg,rgba(var(--accent-rgb),.22),rgba(var(--accent2-rgb),.10) 60%,rgba(13,17,23,.55));
+  backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);
+  border:1px solid rgba(var(--accent2-rgb),.25);
   border-radius:var(--radius-lg);
   box-shadow:var(--shadow-deep);
   max-height:62vh;overflow-y:auto;overflow-x:hidden;
@@ -366,9 +474,10 @@ html.search-focused .bar {
 
 .card{
   border-radius:var(--radius-lg);overflow:hidden;
-  background:linear-gradient(160deg,#1a2230,#111820);
-  border:1px solid rgba(255,255,255,.09);
-  border-top:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(150deg,rgba(var(--accent-rgb),.22),rgba(var(--accent2-rgb),.10) 60%,rgba(13,17,23,.4));
+  backdrop-filter:blur(20px) saturate(1.5);
+  -webkit-backdrop-filter:blur(20px) saturate(1.5);
+  border:1px solid rgba(var(--accent2-rgb),.25);
   transition:var(--transition-fast);
   cursor:pointer;position:relative;
   box-shadow:0 4px 16px rgba(0,0,0,.4),0 1px 0 rgba(255,255,255,.04) inset;
@@ -448,7 +557,47 @@ html.search-focused .bar {
   z-index:0;overflow:hidden;
   background:linear-gradient(160deg, #0f1923 0%, #1a2535 50%, #0d1117 100%);
 }
-.det-hero.landscape{aspect-ratio:16/9;max-height:42vh}
+.det-hero.landscape{aspect-ratio:auto}
+/* ===== Emby 风格全屏海报背景（独立于 sheet，fixed 不受 sheet transform 影响）===== */
+.det-hero-bg{
+  position:fixed;inset:0;z-index:38;          /* 低于 sheet(40)，详情打开后透过透明的 sheet 透出 */
+  background-size:cover;background-position:center 12%;
+  background-color:#0d1117;                   /* 深色兜底：海报图加载前也不会透出主页 */
+  opacity:0;pointer-events:none;
+  transition:opacity .4s ease;
+  will-change:opacity;
+}
+.det-hero-bg.show{opacity:1}
+/* 轮播图层：两层交替 crossfade；淡出时露出的是 detHeroBg 深色底而非主页 */
+.det-hero-bg-img{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center 12%;
+  opacity:0;transition:opacity .9s ease;
+}
+/* 渐变压暗层：大幅调淡——资源已收进带玻璃背景的折叠条，海报得以大部分清晰露出 */
+.det-hero-scrim{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,
+    rgba(13,17,23,.12) 0%,
+    rgba(13,17,23,0) 32%,
+    rgba(13,17,23,0) 60%,
+    rgba(13,17,23,.28) 82%,
+    rgba(13,17,23,.5) 100%);
+}
+/* 横版沉浸式：sheet 背景透明（透出后面的全屏海报），用 flex 纵向排让内容沉底 */
+.sheet.landscape-mode{background:transparent!important;display:flex;flex-direction:column}
+/* 海报区撑开占据上方所有空间，把播放按钮挤到底沿，紧接下方标题与折叠条 */
+.sheet.landscape-mode .det-hero{
+  flex:1 1 auto;height:auto;min-height:26vh;
+  background:transparent;aspect-ratio:auto;max-height:none;
+  overflow:visible;                /* 让播放按钮的呼吸光晕不被裁切 */
+}
+.sheet.landscape-mode .det-hero-img{display:none}     /* 用全屏 detHeroBg 背景代替 */
+.sheet.landscape-mode .det-hero::after{display:none}
+/* 播放按钮落在海报底沿正中，间距收紧让底部内容组更紧凑 */
+.sheet.landscape-mode .det-hero-cta{align-items:flex-end;justify-content:center;padding-bottom:12px}
+/* 沉浸式详情页隐藏吸顶标题栏，避免滑动时顶部标题栏闪现、破坏沉浸感 */
+.sheet.landscape-mode .det-topbar{display:none!important}
 /* 海报大图：完整清晰展示，不裁切关键内容，默认透明，加载成功后淡入 */
 .det-hero-img{
   position:absolute;inset:0;z-index:0;
@@ -485,10 +634,10 @@ html.search-focused .bar {
   pointer-events:none;
 }
 .det-topbar.scrolled{
-  background:rgba(13,17,23,.88);
-  border-bottom:1px solid rgba(255,255,255,.07);
-  backdrop-filter:blur(20px) saturate(1.2);
-  -webkit-backdrop-filter:blur(20px) saturate(1.2);
+  background:linear-gradient(150deg,rgba(var(--accent-rgb),.20),rgba(var(--accent2-rgb),.08) 60%,rgba(13,17,23,.7));
+  border-bottom:1px solid rgba(var(--accent2-rgb),.2);
+  backdrop-filter:blur(20px) saturate(1.5);
+  -webkit-backdrop-filter:blur(20px) saturate(1.5);
 }
 .det-topbar-title{
   flex:1;min-width:0;
@@ -505,6 +654,68 @@ html.search-focused .bar {
   padding:6px 18px calc(var(--safe-bottom) + 24px);
   box-sizing:border-box;
 }
+/* 横版沉浸式：资源区自然高度，作为 flex 项紧贴撑开的海报下方，整组沉到屏幕底部 */
+.sheet.landscape-mode .panel{
+  margin-top:0!important;
+  background:transparent!important;
+  position:relative;z-index:2;
+  flex:0 0 auto;
+}
+/* ===== Apple TV 风格大标题：播放按钮下方，大号粗体 ===== */
+.det-bigtitle{
+  font-size:34px;font-weight:850;color:#fff;line-height:1.1;
+  letter-spacing:.01em;margin:2px 0 12px;text-align:center;
+  text-shadow:0 2px 24px rgba(0,0,0,.6),0 1px 4px rgba(0,0,0,.5);
+}
+.sheet.landscape-mode .det-bigtitle{font-size:40px;margin:8px 0 6px;text-align:center}
+.sheet.landscape-mode .det-pills{justify-content:center}
+/* 影视类型标签：标题下方居中显示 */
+.det-genres{
+  text-align:center;color:rgba(255,255,255,.72);
+  font-size:13px;font-weight:600;letter-spacing:.04em;
+  margin:0 0 10px;text-shadow:0 1px 8px rgba(0,0,0,.55);
+}
+.det-genres:empty{display:none}
+/* ===== 资源折叠条：默认收起、两条并排，露出大部分海报 ===== */
+.det-collapse-row{display:block}
+.det-collapse{
+  background:linear-gradient(150deg,rgba(var(--accent-rgb),.18),rgba(var(--accent2-rgb),.08) 60%,rgba(13,17,23,.38));   /* 降低不透明度，海报透出更多 */
+  backdrop-filter:blur(22px) saturate(1.5);
+  -webkit-backdrop-filter:blur(22px) saturate(1.5);
+  border:1px solid rgba(var(--accent2-rgb),.22);
+  border-radius:var(--radius-full);overflow:hidden;   /* 圆角同步顶部搜索框 */
+  box-shadow:0 10px 30px rgba(0,0,0,.32);
+  width:fit-content;max-width:92%;margin:0 auto;  /* 收起时宽度自适应内容，横竖屏都刚好不挤不空 */
+  transition:max-width .28s ease,border-radius .28s ease;
+}
+.det-collapse.open{width:100%;max-width:720px;border-radius:18px}    /* 展开时铺开、收圆角为长方形，避免大弧形盖住内容 */
+.det-collapse-head{
+  display:flex;align-items:center;gap:12px;justify-content:center;
+  padding:10px 20px;cursor:pointer;user-select:none;
+  font-size:15px;font-weight:800;color:#fff;
+}
+/* 资源 tab 切换：网盘资源 / 盘搜资源，居中显示 */
+.det-res-tabs{display:flex;gap:10px;flex:0 0 auto;justify-content:center}
+.det-res-tab{
+  background:transparent;border:none;cursor:pointer;
+  color:rgba(255,255,255,.5);font-size:15px;font-weight:800;
+  padding:6px 14px;border-radius:var(--radius-full);   /* 圆角同步资源框（胶囊）*/
+  white-space:nowrap;                                  /* 文字不换行 */
+  display:inline-flex;align-items:center;transition:background .15s,color .15s;
+}
+.det-res-tab.active{color:#fff;background:rgba(255,255,255,.12)}
+.det-res-tab em{
+  font-style:normal;margin-left:7px;padding:1px 8px;border-radius:999px;
+  font-size:12px;font-weight:900;color:var(--accent2);
+  background:rgba(var(--accent2-rgb),.15);border:1px solid rgba(var(--accent2-rgb),.3);
+}
+.det-res-pane[hidden]{display:none}
+.det-collapse-arrow{opacity:.65;font-size:12px;transition:transform .22s ease;flex-shrink:0}
+.det-collapse.open .det-collapse-arrow{transform:rotate(180deg)}
+.det-collapse-body{display:none;padding:0 14px 14px}
+.det-collapse.open .det-collapse-body{display:block}
+.det-collapse-body .pan-list{height:400px;max-height:48vh;overflow-y:auto}   /* 固定约6条高度，数量不同不再跳动，不足则留白 */
+.det-collapse .pan-cfg-btn{flex-shrink:0}
 
 /* poster row — 海报已独立展示为顶部大图，此处只保留文字标题区 */
 .det-poster-row{
@@ -791,8 +1002,8 @@ html.search-focused .bar {
   .app{max-width:1400px;margin:0 auto}
 }
 
-/* ===== 盘搜框：约 10 条后内部滚动，避免详情页过长 ===== */
-.pan-search-box .pan-list{max-height:620px;overflow-y:auto}
+/* 盘搜框：固定约 6 条高度，资源数量变化时不再高低跳动，不足 6 条留白 */
+.pan-search-box .pan-list{height:400px;overflow-y:auto}
 /* 详情页“网盘资源 / 盘搜资源”两块：默认竖排堆叠 */
 .det-pan-cols{display:block}
 /* 平板横屏：两块并排、各自内部滚动、固定等高（对齐不层次不齐）*/
@@ -801,8 +1012,8 @@ html.search-focused .bar {
   .det-pan-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
   .det-pan-col{min-width:0;display:flex;flex-direction:column}
   .det-pan-col>.det-sec-label{margin-top:0}
-  .det-pan-col>.pan-list{height:520px;overflow-y:auto}                              /* 网盘资源框：定高 */
-  .det-pan-col>.pan-search-box{height:520px;display:flex;flex-direction:column}     /* 盘搜框：与左侧等高 */
+  .det-pan-col>.pan-list{height:400px;overflow-y:auto}                              /* 网盘资源框：定高，与盘搜框统一 */
+  .det-pan-col>.pan-search-box{height:400px;display:flex;flex-direction:column}     /* 盘搜框：与左侧等高 */
   .det-pan-col>.pan-search-box>.pan-list{flex:1;min-height:0;max-height:none;overflow-y:auto}
 }
 
@@ -874,10 +1085,9 @@ body:has(.sheet.active) #backTop{opacity:0!important;pointer-events:none!importa
   max-height:240px;overflow-y:auto;overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
   border-radius:var(--radius-lg);
-  background:linear-gradient(160deg,rgba(30,38,50,.98),rgba(18,24,32,.98));
-  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
-  border:1px solid rgba(255,255,255,.12);
-  border-top:1px solid rgba(255,255,255,.18);
+  background:linear-gradient(150deg,rgba(var(--accent-rgb),.22),rgba(var(--accent2-rgb),.10) 60%,rgba(13,17,23,.55));
+  backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);
+  border:1px solid rgba(var(--accent2-rgb),.25);
   box-shadow:var(--shadow-deep);
   display:none;
   padding:4px 0;
@@ -969,6 +1179,8 @@ body:has(.sheet.active) #backTop{opacity:0!important;pointer-events:none!importa
     </div>
   </div>
 </div>
+<!-- Emby 风格全屏海报背景：独立于 sheet（放在 sheet 外），避免 sheet 的 transform 让 fixed 失效 -->
+<div class="det-hero-bg" id="detHeroBg"><div class="det-hero-bg-img" id="detHeroBgA"></div><div class="det-hero-bg-img" id="detHeroBgB"></div><div class="det-hero-scrim"></div></div>
 <div class="sheet" id="sheet">
   <!-- 独立海报大图：竖版按2:3比例展示，横版由JS检测后自动切换为16:9比例 -->
   <div class="det-hero" id="detHero">
@@ -1072,6 +1284,9 @@ function _exitSearchToHome() {
 function _doCloseSheet() {
   const sheet = $('#sheet');
   if (!sheet.classList.contains('active')) return;
+  sheet.classList.remove('landscape-mode');   // 先恢复 transform 能力，否则滑出动画会被 transform:none 卡住
+  stopBgRotation();
+  {const bg=document.getElementById('detHeroBg');if(bg)bg.classList.remove('show')}   // 隐藏全屏海报背景
   sheet.classList.remove('active');
   const topbar = $('#detTopbar');
   if (topbar) topbar.classList.remove('scrolled');
@@ -1896,6 +2111,62 @@ async function tmdbPosterFullCached(title,year){
   const path=await tmdbPathCached(title,year);
   return path?TMDB_IMG_FULL+path:null;
 }
+// 全屏沉浸式背景用：TMDB 横版剧照(backdrop)，用 original 最高画质（高分屏平板不糊）
+async function tmdbBackdropCached(title,year){
+  const item=await tmdbMatchCached(title,year);
+  return item&&item.backdrop_path?(TMDB_IMG_FULL+item.backdrop_path):null;
+}
+// 详情页海报轮播图源：横屏用横版剧照(backdrops)、竖屏用竖版海报(posters)，各自不裁切
+const tmdbImagesCache=new Map();
+async function tmdbImagesCached(title,year){
+  const item=await tmdbMatchCached(title,year);
+  if(!item||!item.id)return [];
+  const landscape=window.innerWidth>=window.innerHeight;
+  const type=(item.media_type==='tv'||item.first_air_date)?'tv':'movie';
+  const ck=type+item.id+(landscape?'L':'P');
+  if(tmdbImagesCache.has(ck))return tmdbImagesCache.get(ck);
+  const p=(async()=>{
+    try{
+      const d=await tmdbJSON(`${TMDB_API}/${type}/${item.id}/images?api_key=${TMDB_KEY}`);
+      let arr=((landscape?d.backdrops:d.posters)||[]).filter(b=>b.file_path);
+      if(landscape && !arr.length) arr=(d.posters||[]).filter(b=>b.file_path);   // 横屏没有横版剧照时，退回竖版海报（至少清晰，不用站源模糊图）
+      arr.sort((a,b)=>(b.vote_average||0)-(a.vote_average||0));   // 高分图排前
+      return arr.slice(0,6).map(b=>TMDB_IMG_FULL+b.file_path);
+    }catch(e){return []}
+  })();
+  tmdbImagesCache.set(ck,p);
+  return p;
+}
+// 海报轮播：两图层 A/B 交替 crossfade；淡出时露出的是 detHeroBg 深色底，不会露主页
+let _bgRot={timer:null,active:'A'};
+function stopBgRotation(){ if(_bgRot.timer){clearInterval(_bgRot.timer);_bgRot.timer=null;} }
+function setBackdrops(urls){
+  stopBgRotation();
+  const A=document.getElementById('detHeroBgA'),B=document.getElementById('detHeroBgB');
+  if(!A||!B||!urls||!urls.length)return;
+  const pos=window.innerWidth>=window.innerHeight?'center 12%':'center 28%';   // 横版偏上、竖版海报居中偏上
+  A.style.backgroundPosition=pos;B.style.backgroundPosition=pos;
+  A.style.backgroundImage=`url("${urls[0]}")`;A.style.opacity='1';
+  B.style.opacity='0';
+  _bgRot.active='A';
+  if(urls.length>1){
+    let idx=0;
+    _bgRot.timer=setInterval(()=>{
+      idx=(idx+1)%urls.length;
+      const cur=_bgRot.active==='A'?A:B, nxt=_bgRot.active==='A'?B:A;
+      nxt.style.backgroundImage=`url("${urls[idx]}")`;
+      nxt.style.opacity='1';cur.style.opacity='0';
+      _bgRot.active=_bgRot.active==='A'?'B':'A';
+    },6500);
+  }
+}
+// TMDB 类型(genre) ID→中文名（合并 movie 与 tv 两套），用于标题下方的影视类型标签
+const TMDB_GENRES={28:'动作',12:'冒险',16:'动画',35:'喜剧',80:'犯罪',99:'纪录',18:'剧情',10751:'家庭',14:'奇幻',36:'历史',27:'恐怖',10402:'音乐',9648:'悬疑',10749:'爱情',878:'科幻',10770:'电视电影',53:'惊悚',10752:'战争',37:'西部',10759:'动作冒险',10762:'儿童',10763:'新闻',10764:'真人秀',10765:'科幻奇幻',10766:'肥皂剧',10767:'脱口秀',10768:'战争政治'};
+async function tmdbGenresText(title,year){
+  const item=await tmdbMatchCached(title,year);
+  if(!item||!Array.isArray(item.genre_ids))return '';
+  return item.genre_ids.map(id=>TMDB_GENRES[id]).filter(Boolean).slice(0,3).join(' · ');
+}
 // ===== TMDB 官方更新状态（连载中/已完结/更新至第N集），取代原先的「N条资源」角标 =====
 const tmdbStatusCache=new Map();
 async function tmdbStatusText(title,year){
@@ -2041,7 +2312,7 @@ async function probePan(v){
     if(ck&&_panProbeCache.has(ck)){ if(_panProbeCache.get(ck)) return {ok:true,has:true}; anyOk=true; continue; }
     try{
       const s=SITES.find(x=>x.id===src.siteId)||site();
-      const r=await get(s,src.href,12,true);
+      const r=await get(s,src.href,8,true);
       anyOk=true;
       const RAW=(r.html||'').replace(/\\\//g,'/');
       const hit=_PAN_TEST.test(RAW);
@@ -2054,7 +2325,7 @@ async function probePan(v){
 // 搜索后台验证：把「确认抓到了详情、但里面没有任何网盘链接」的空卡淡出隐藏。
 // 抓取失败/超时的卡一律保留，不冤枉。gen 用于在用户离开搜索后及时停止。
 async function verifyAndHideEmpty(list,gen){
-  const CONC=2;
+  const CONC=6;   // 验证在搜索请求结束后才跑，此时桥接空闲，可放开并发加快隐藏
   let idx=0;
   async function worker(){
     while(idx<list.length){
@@ -2131,7 +2402,9 @@ async function openDetail(v){
   topbar.classList.remove('scrolled');
   heroImg.classList.remove('loaded');
   heroImg.removeAttribute('src');
-  hero.classList.remove('landscape');
+  hero.classList.add('landscape');
+  sheet.classList.add('landscape-mode');   // 所有详情统一全屏沉浸，避免退回半屏的文档流海报
+  {stopBgRotation();const bg=document.getElementById('detHeroBg');if(bg){delete bg.dataset.bd;bg.classList.add('show');}const A=document.getElementById('detHeroBgA'),B=document.getElementById('detHeroBgB');if(A){A.style.backgroundImage='';A.style.opacity='0';}if(B){B.style.backgroundImage='';B.style.opacity='0';}}   // 立即显示深色背景层、清空旧海报，海报图加载好后再覆盖，避免空窗期露出主页
   heroCta.innerHTML='';
 
   sheet.classList.add('active');
@@ -2164,8 +2437,13 @@ async function openDetail(v){
       if(!pic)return;
       let triedAlt=false;
       heroImg.onload=()=>{
-        if(heroImg.naturalWidth>heroImg.naturalHeight) hero.classList.add('landscape');
-        else hero.classList.remove('landscape');
+        const bg=document.getElementById('detHeroBg');
+        // 站源图（无论横竖）都作为全屏背景兜底，TMDB 高清图就绪后会覆盖
+        if(bg && !bg.dataset.bd){
+          const A=document.getElementById('detHeroBgA');
+          if(A){A.style.backgroundImage=`url("${heroImg.src}")`;A.style.opacity='1';}
+          bg.classList.add('show');
+        }
         heroImg.classList.add('loaded');
       };
       heroImg.onerror=()=>{
@@ -2176,6 +2454,20 @@ async function openDetail(v){
     };
     setHero(v.pic||info.pic||'');
     tmdbPosterFullCached(v.title||'',extractYear(v)).then(tp=>{if(tp)setHero(tp)}).catch(()=>{});
+    // 影视类型标签（TMDB genres），标题下方居中
+    tmdbGenresText(v.title||'',extractYear(v)).then(g=>{
+      const el=document.getElementById('detGenres');
+      if(el&&g)el.textContent=g;
+    }).catch(()=>{});
+    tmdbImagesCached(v.title||'',extractYear(v)).then(urls=>{
+      const bg=document.getElementById('detHeroBg');
+      if(bg&&urls&&urls.length){
+        setBackdrops(urls);          // 多张剧照轮播；只有一张时就静态显示
+        bg.dataset.bd='1';
+        bg.classList.add('show');
+        sheet.classList.add('landscape-mode');
+      }
+    }).catch(()=>{});
 
     // pills
     const pills=[
@@ -2190,10 +2482,20 @@ async function openDetail(v){
     </button>`:'';
 
     panel.innerHTML=`
-<div class="det-pan-cols">
-<section class="det-pan-col">
-<div class="det-sec-label">网盘资源</div>
-<div class="pan-list">
+<div class="det-bigtitle">${esc(title)}</div>
+<div class="det-genres" id="detGenres"></div>
+<div class="det-collapse-row">
+<section class="det-collapse det-res">
+<div class="det-collapse-head">
+  <div class="det-res-tabs">
+    <button class="det-res-tab active" data-tab="netdisk" type="button">网盘资源<em>${d.pans.length||0}</em></button>
+    <button class="det-res-tab" data-tab="pansou" type="button">盘搜资源</button>
+  </div>
+  <button id="panCfgBtn" class="pan-cfg-btn" title="盘搜设置（地址 + 网盘类型）">⚙</button>
+</div>
+<div class="det-collapse-body">
+  <div class="det-res-pane" data-pane="netdisk">
+    <div class="pan-list">
 ${d.pans.map((p,i)=>`
 <div class="pan-item">
   <span class="pan-type">${esc(p.type)}</span>
@@ -2202,17 +2504,39 @@ ${d.pans.map((p,i)=>`
     <div class="pan-url">${esc(p.url)}</div>
   </div>
   <div class="pan-actions">
-    <button class="copy-btn" data-link="${esc(p.url)}">复制</button>
     <button class="pan-open-btn" data-i="${i}">打开</button>
   </div>
 </div>`).join('')||'<div class="empty">未提取到网盘链接</div>'}
+    </div>
+  </div>
+  <div class="det-res-pane" data-pane="pansou" hidden>
+    <div class="pan-search-box" id="panSearchBox"><div class="pan-search-status">正在聚合搜索网盘…</div></div>
+  </div>
 </div>
 </section>
-<section class="det-pan-col">
-<div class="det-sec-label"><span>盘搜资源</span><button id="panCfgBtn" class="pan-cfg-btn" title="盘搜设置（地址 + 网盘类型）">⚙</button></div>
-<div class="pan-search-box" id="panSearchBox"><div class="pan-search-status">正在聚合搜索网盘…</div></div>
-</section>
 </div>`;
+
+    // 单条资源框：tab 切换「网盘资源 / 盘搜资源」，箭头/头部空白处展开收起（默认收起，露出海报）
+    const resBox=panel.querySelector('.det-res');
+    const resHead=resBox.querySelector('.det-collapse-head');
+    resBox.querySelectorAll('.det-res-tab').forEach(tab=>{
+      tab.addEventListener('click',(e)=>{
+        e.stopPropagation();
+        resBox.querySelectorAll('.det-res-tab').forEach(t=>t.classList.toggle('active',t===tab));
+        resBox.querySelectorAll('.det-res-pane').forEach(p=>{p.hidden=(p.dataset.pane!==tab.dataset.tab)});
+        resBox.classList.add('open');   // 点 tab 自动展开
+      });
+    });
+    resHead.addEventListener('click',(e)=>{
+      if(e.target.closest('.det-res-tab')||e.target.closest('.pan-cfg-btn'))return;
+      resBox.classList.toggle('open');
+    });
+    // 点击海报任意位置（资源框、播放按钮以外）自动收起资源框
+    sheet.onclick=(e)=>{
+      if(resBox.classList.contains('open') && !e.target.closest('.det-res') && !e.target.closest('.det-hero-cta')){
+        resBox.classList.remove('open');
+      }
+    };
 
     // 快捷播放第一条
     const playBtn=$('#detPlayBtn');
@@ -2420,17 +2744,16 @@ ${list.map(p=>`
     <div class="pan-url">${esc(p.url)}${p.password?' · 提取码 '+esc(p.password):''}</div>
   </div>
   <div class="pan-actions">
-    <button class="copy-btn" data-link="${esc(p.url)}">复制</button>
     <button class="pan-open-btn" data-type="${esc(p.type)}" data-url="${esc(p.url)}" data-pwd="${esc(p.password)}" data-title="${esc(p.title)}">打开</button>
   </div>
 </div>`).join('')}
 </div>`;
   box.querySelectorAll('.pan-search-tab').forEach(btn=>{
-    btn.onclick=()=>renderPanSearchBox(box,allList,btn.dataset.type);
+    btn.onclick=(e)=>{e.stopPropagation();renderPanSearchBox(box,allList,btn.dataset.type)};
   });
-  box.querySelectorAll('.copy-btn').forEach(btn=>btn.onclick=()=>copyText(btn.dataset.link));
+  box.querySelectorAll('.copy-btn').forEach(btn=>btn.onclick=(e)=>{e.stopPropagation();copyText(btn.dataset.link)});
   box.querySelectorAll('.pan-open-btn').forEach(btn=>{
-    btn.onclick=()=>playPanSearch({type:btn.dataset.type,url:btn.dataset.url,password:btn.dataset.pwd,title:btn.dataset.title});
+    btn.onclick=(e)=>{e.stopPropagation();playPanSearch({type:btn.dataset.type,url:btn.dataset.url,password:btn.dataset.pwd,title:btn.dataset.title})};
   });
   panHealthCheck(box,list);
 }
@@ -2861,6 +3184,230 @@ renderTabs();
 })();
 // 建立初始哨兵，防止第一次 back 穿透退出
 _ensureHome();
+})();
+
+/* ===== 长按搜索图标：循环切换主题（默认橙 + 7 种配色）=====
+   - 长按搜索按钮 600ms 触发，依次循环到下一个主题，震动反馈 + 顶部小提示
+   - 主题持久化到 localStorage，跨会话保留 */
+(function(){
+  'use strict';
+  const THEME_KEY='wo_theme';
+  const btn=document.querySelector('.search .btn.primary');
+  if(!btn)return;
+
+  // 主题列表：cls 为空字符串代表默认橙色主题（不附加 class）
+  const THEMES=[
+    {cls:'',            name:'默认橙色'},
+    {cls:'neon',        name:'霓虹蓝'},
+    {cls:'theme-amber', name:'琥珀金'},
+    {cls:'theme-rose',  name:'玫瑰金'},
+    {cls:'theme-indigo',name:'午夜蓝紫'},
+    {cls:'theme-teal',  name:'雾蓝青'},
+    {cls:'theme-sand',  name:'香槛灰金'},
+    {cls:'theme-jade',  name:'墨绿'}
+  ];
+  const THEME_CLASSES=THEMES.map(t=>t.cls).filter(Boolean);
+
+  function applyTheme(idx){
+    THEME_CLASSES.forEach(c=>document.body.classList.remove(c));
+    const t=THEMES[idx];
+    if(t.cls)document.body.classList.add(t.cls);
+  }
+  function currentIndex(){
+    const i=THEMES.findIndex(t=>t.cls && document.body.classList.contains(t.cls));
+    return i<0 ? 0 : i;
+  }
+  // 启动时读取已保存主题
+  let themeIdx=0;
+  try{
+    const saved=parseInt(localStorage.getItem(THEME_KEY),10);
+    if(!isNaN(saved)&&saved>=0&&saved<THEMES.length){
+      themeIdx=saved;
+      applyTheme(themeIdx);
+    }
+  }catch(e){}
+
+  let toastEl=null;
+  function toast(text){
+    if(!toastEl){
+      toastEl=document.createElement('div');
+      toastEl.style.cssText='position:fixed;top:calc(var(--safe-top) + 14px);left:50%;'
+        +'transform:translateX(-50%) translateY(-8px);z-index:90;'
+        +'background:rgba(20,24,32,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);'
+        +'border:1px solid rgba(255,255,255,.12);border-radius:999px;'
+        +'padding:7px 16px;font-size:13px;font-weight:700;color:#fff;'
+        +'opacity:0;transition:opacity .22s ease,transform .22s ease;pointer-events:none;white-space:nowrap';
+      document.body.appendChild(toastEl);
+    }
+    toastEl.textContent=text;
+    toastEl.style.opacity='1';
+    toastEl.style.transform='translateX(-50%) translateY(0)';
+    clearTimeout(toastEl._t);
+    toastEl._t=setTimeout(()=>{
+      toastEl.style.opacity='0';
+      toastEl.style.transform='translateX(-50%) translateY(-8px)';
+    },1400);
+  }
+
+  const LP=600;       // 长按触发时长，与卡片收藏长按保持一致手感
+  const MOVE_TOL=10;  // 超出此移动距离视为滑动/取消，不触发
+  let timer=null,sx=0,sy=0,fired=false;
+
+  function clear(){ if(timer){clearTimeout(timer);timer=null} }
+
+  function start(x,y){
+    fired=false;
+    sx=x;sy=y;
+    clear();
+    timer=setTimeout(()=>{
+      timer=null;fired=true;
+      themeIdx=(currentIndex()+1)%THEMES.length;
+      applyTheme(themeIdx);
+      try{localStorage.setItem(THEME_KEY,String(themeIdx))}catch(e){}
+      if(navigator.vibrate){try{navigator.vibrate([12,40,12])}catch(_){}}
+      toast('已切换：'+THEMES[themeIdx].name+'主题');
+    },LP);
+  }
+  function move(x,y){
+    if(!timer)return;
+    if(Math.abs(x-sx)>MOVE_TOL||Math.abs(y-sy)>MOVE_TOL)clear();
+  }
+  function end(e){
+    clear();
+    if(fired){ e.preventDefault(); e.stopPropagation(); } // 已触发主题切换，拦截这次抬手的 click/submit
+  }
+
+  btn.addEventListener('touchstart',e=>{
+    const t=e.touches[0];start(t.clientX,t.clientY);
+  },{passive:true});
+  btn.addEventListener('touchmove',e=>{
+    const t=e.touches[0];move(t.clientX,t.clientY);
+  },{passive:true});
+  btn.addEventListener('touchend',end,{passive:false});
+  btn.addEventListener('touchcancel',clear,{passive:true});
+
+  // 桌面端鼠标长按（便于在电脑上测试）
+  btn.addEventListener('mousedown',e=>{start(e.clientX,e.clientY)});
+  btn.addEventListener('mousemove',e=>{move(e.clientX,e.clientY)});
+  btn.addEventListener('mouseup',end);
+  btn.addEventListener('mouseleave',clear);
+
+
+  // 长按触发后，阻止这次抬手连带的表单提交（搜索按钮在 <form> 内）
+  btn.addEventListener('click',e=>{
+    if(fired){fired=false;e.preventDefault();e.stopPropagation()}
+  },true);
+})();
+
+</script>
+<script>
+/* ===== Android TV / 电视遥控器（D-pad）适配 =====
+   - 方向键在卡片/按钮/输入框间移动焦点（空间导航，按屏幕位置就近选择）
+   - OK/确定键触发当前焦点元素
+   - 返回键交给 history（自动关弹窗/详情/退出搜索）
+   - 焦点高亮放大，电视远看也清晰
+   - 仅在电视环境启用（带触摸的平板/手机不受影响）；可用 ?tv=1 强制、?tv=0 关闭 */
+(function(){
+  'use strict';
+  var ua=navigator.userAgent;
+  var isTV=/\b(TV|BRAVIA|AFT[A-Z]|MiBOX|MiTV|SHIELD|GoogleTV|AndroidTV|SmartTV|NetCast|Web0S|webOS|Tizen|HbbTV|DTV)\b/i.test(ua)
+        || (/Android/i.test(ua) && !('ontouchstart' in window) && !/Mobile/i.test(ua));
+  if(/[?&]tv=0/.test(location.search)) return;
+  if(!isTV && !/[?&]tv=1/.test(location.search)) return;
+  document.documentElement.classList.add('tv-mode');
+
+  // 焦点高亮样式
+  var st=document.createElement('style');
+  st.textContent=[
+    '.tv-mode :focus{outline:none}',
+    '.tv-mode .card,.tv-mode .src-tab,.tv-mode .chip,.tv-mode .det-res-tab,.tv-mode .pan-item,.tv-mode .pan-open-btn,.tv-mode .det-play-btn,.tv-mode #kw,.tv-mode .pan-cfg-btn,.tv-mode .pan-search-tab,.tv-mode .custom-modal-btn{transition:transform .12s ease,box-shadow .12s ease}',
+    '.tv-mode .card:focus,.tv-mode .src-tab:focus,.tv-mode .chip:focus,.tv-mode .det-res-tab:focus,.tv-mode .pan-item:focus,.tv-mode .pan-open-btn:focus,.tv-mode .det-play-btn:focus,.tv-mode #kw:focus,.tv-mode .pan-cfg-btn:focus,.tv-mode .pan-search-tab:focus,.tv-mode .custom-modal-btn:focus{outline:3px solid var(--accent);outline-offset:3px;box-shadow:0 0 0 6px rgba(var(--accent-rgb),.35),0 10px 32px rgba(0,0,0,.55);transform:scale(1.05);z-index:6;position:relative;border-radius:14px}',
+    '.tv-mode .det-play-btn:focus{transform:scale(1.12)}',
+    '.tv-mode .card:focus{transform:scale(1.06)}'
+  ].join('\n');
+  document.head.appendChild(st);
+
+  var SEL='#kw,.src-tab,.chip,.card,.det-play-btn,.det-res-tab,.pan-item,.pan-open-btn,.pan-cfg-btn,.pan-search-tab,.custom-modal-btn';
+  function vis(el){
+    var r=el.getBoundingClientRect();
+    if(r.width<=0||r.height<=0) return false;
+    if(r.bottom<-2||r.top>innerHeight+2||r.right<-2||r.left>innerWidth+2) return false;
+    var s=getComputedStyle(el);
+    if(s.visibility==='hidden'||s.display==='none'||parseFloat(s.opacity||'1')===0) return false;
+    return true;
+  }
+  function scope(){
+    var modal=document.querySelector('.custom-modal-mask');
+    if(modal&&getComputedStyle(modal).display!=='none'&&vis(modal)) return modal;
+    var sheet=document.getElementById('sheet');
+    if(sheet&&sheet.classList.contains('active')) return sheet;
+    return document;
+  }
+  function focusables(){
+    var root=scope();
+    var els=Array.prototype.slice.call(root.querySelectorAll(SEL)).filter(vis);
+    if(root===document){
+      var sheet=document.getElementById('sheet');
+      if(sheet) els=els.filter(function(el){return !sheet.contains(el);});
+    }
+    els.forEach(function(el){if(!el.hasAttribute('tabindex'))el.setAttribute('tabindex','0');});
+    return els;
+  }
+  function ctr(el){var r=el.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2};}
+  function moveFocus(dir){
+    var els=focusables(); if(!els.length) return;
+    var cur=document.activeElement;
+    if(!cur||els.indexOf(cur)<0){els[0].focus();sf(els[0]);return;}
+    var c=ctr(cur),best=null,bs=Infinity;
+    for(var i=0;i<els.length;i++){
+      var el=els[i]; if(el===cur) continue;
+      var t=ctr(el),dx=t.x-c.x,dy=t.y-c.y,valid,along,ortho;
+      if(dir==='ArrowLeft'){valid=dx<-2;along=-dx;ortho=Math.abs(dy);}
+      else if(dir==='ArrowRight'){valid=dx>2;along=dx;ortho=Math.abs(dy);}
+      else if(dir==='ArrowUp'){valid=dy<-2;along=-dy;ortho=Math.abs(dx);}
+      else{valid=dy>2;along=dy;ortho=Math.abs(dx);}
+      if(!valid) continue;
+      var score=along+ortho*1.7;
+      if(score<bs){bs=score;best=el;}
+    }
+    if(best){best.focus();sf(best);}
+  }
+  function sf(el){try{el.scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'});}catch(e){try{el.scrollIntoView();}catch(_){}}}
+
+  document.addEventListener('keydown',function(e){
+    var k=e.key,ae=document.activeElement;
+    if(k==='ArrowLeft'||k==='ArrowRight'||k==='ArrowUp'||k==='ArrowDown'){
+      if(ae&&ae.id==='kw'&&(k==='ArrowLeft'||k==='ArrowRight')) return;
+      moveFocus(k); e.preventDefault();
+    }else if(k==='Enter'){
+      if(ae&&ae.id==='kw') return;            // 搜索框回车走原提交逻辑
+      if(ae&&ae!==document.body){ae.click();e.preventDefault();}
+    }else if(k==='Backspace'||k==='Escape'||k==='BrowserBack'||k==='GoBack'||e.keyCode===4||e.keyCode===10009){
+      if(ae&&ae.id==='kw'&&k==='Backspace') return;   // 搜索框退格删字
+      if(history.length>1){history.back();e.preventDefault();}
+    }
+  });
+
+  // 自动聚焦：详情打开→播放按钮；列表/弹窗刷新→第一个可聚焦项
+  var t=null;
+  var mo=new MutationObserver(function(){
+    clearTimeout(t);
+    t=setTimeout(function(){
+      var sheet=document.getElementById('sheet');
+      if(sheet&&sheet.classList.contains('active')){
+        if(!sheet.contains(document.activeElement)){
+          var pb=sheet.querySelector('.det-play-btn')||sheet.querySelector('.det-res-tab');
+          if(pb)pb.focus();
+        }
+        return;
+      }
+      // 主页：若焦点丢失，落到第一个卡片/控件
+      if(!document.activeElement||document.activeElement===document.body){
+        var els=focusables(); if(els.length) els[0].focus();
+      }
+    },140);
+  });
+  mo.observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']});
 })();
 </script>
 </body>
