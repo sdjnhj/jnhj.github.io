@@ -185,33 +185,37 @@ html:not(.fm-native),html:not(.fm-native) body{background:var(--bg)}
 /* 全局高斯模糊雾层：无论 App 背景是什么，都蒙一层磨砂雾 */
 #bgfog{
   position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:rgba(13,17,23,.42);
-  backdrop-filter:blur(46px) saturate(1.25);
-  -webkit-backdrop-filter:blur(46px) saturate(1.25);
+  background:rgba(13,17,23,.48);
+  backdrop-filter:blur(46px) saturate(1.35);
+  -webkit-backdrop-filter:blur(46px) saturate(1.35);
 }
 html:not(.fm-native) #bgfog{display:none}
+/* iOS 26 玻璃态：全局环境光渲染层 */
+html:not(.fm-native) body::before{
+  content:'';
+  position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 50% at 15% 10%, rgba(var(--accent-rgb),0.12) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 40% at 85% 80%, rgba(var(--accent2-rgb),0.08) 0%, transparent 60%);
+}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:rgba(255,255,255,.05)}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:var(--radius-full)}
 
-/* ========== 主容器：edge 全屏模式下用安全区变量避让 ========== */
+/* ========== 主容器 ========== */
 .app{
   min-height:100vh;
-  min-height:var(--fm-web-height, 100vh);   /* Native 注入真实高度时优先用 */
-  /* edge：WebView 铺到状态栏后面，需要叠加安全区高度避让；
-     normal：原生顶部工具栏已经把 WebView 顶下来，--safe-top 不再需要叠加，只留一个小间距 */
-  padding-top:    calc(var(--safe-top)    + 12px);
-  padding-bottom: calc(var(--safe-bottom) + 12px);
+  min-height:var(--fm-web-height, 100vh);
+  padding-top:    calc(var(--safe-top) + 12px);
+  padding-bottom: calc(var(--safe-bottom) + 80px);
   padding-left:   calc(var(--safe-left)   + var(--gap));
   padding-right:  calc(var(--safe-right)  + var(--gap));
 }
-/* 非全屏（原生顶部工具栏可见）：不再叠加 safe-top，避免和工具栏间距过宽 */
 html.chrome-normal .app{
   padding-top: var(--gap);
 }
 
-/* ========== 顶部导航栏 — 单行 ========== */
-/* 搜索时整页模糊遮罩，bar 浮在上层 */
+/* ========== iOS 26 悬浮玻璃导航栏 ========== */
 #searchOverlay{
   position:fixed;inset:0;z-index:25;
   backdrop-filter:blur(10px) brightness(0.6);
@@ -229,8 +233,7 @@ html.chrome-normal .app{
 }
 #searchOverlay.show .search-loading{opacity:1;transform:translateY(0)}
 
-/* 搜索框聚焦时：模糊 bar 以外的所有内容（精确列出兄弟元素，不碰 .bar） */
-html.search-focused .navrow,
+/* 聚焦态模糊：搜索时站源坞下滑隐藏（已在 .src-row 规则中定义）*/
 html.search-focused #status,
 html.search-focused #content {
   filter: blur(8px) brightness(0.45);
@@ -239,14 +242,17 @@ html.search-focused #content {
   touch-action: none;
   transition: filter .25s ease;
 }
-/* 聚焦态：整个 .app 内除 .bar 外一律不可交互 */
+html.search-focused .navrow {
+  filter: blur(8px) brightness(0.45);
+  pointer-events: none;
+  transition: filter .25s ease;
+}
 html.search-focused .app {
   pointer-events: none;
 }
 html.search-focused .app .bar {
   pointer-events: auto;
 }
-/* 搜索框聚焦时：全屏透明蒙层，拦截所有点击，点击蒙层退出聚焦 */
 #searchFocusMask {
   display: none;
   position: fixed;
@@ -261,34 +267,79 @@ html.search-focused #searchFocusMask {
   display: block;
   pointer-events: auto;
 }
-/* 搜索栏保持在蒙层之上，isolation 创建独立层叠上下文 */
 html.search-focused .bar {
   position: relative;
   z-index: 50;
   isolation: isolate;
 }
+
+/* ===== 顶部搜索栏：默认隐藏，search-focused 时滑入 ===== */
 .bar{
-  position:relative;z-index:30;
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:50;
   display:flex;align-items:center;gap:8px;
   flex-wrap:nowrap;
-  padding:8px 14px;
+  padding:calc(var(--safe-top) + 10px) 14px 10px;
   background:none;
   backdrop-filter:none;
   -webkit-backdrop-filter:none;
   border:none;
   border-radius:0;
-  margin-bottom:12px;
   box-shadow:none;
+  /* 默认：平移到屏幕上方隐藏 */
+  transform:translateY(-110%);
+  opacity:0;
+  pointer-events:none;
+  transition:transform .3s cubic-bezier(0.34,1.1,0.64,1), opacity .25s ease;
 }
-/* 两个子行合并为同级 flex 子项，隐藏原包装层 */
+html.search-focused .bar{
+  transform:translateY(0);
+  opacity:1;
+  pointer-events:auto;
+}
+.bar-hidden-placeholder-unused{
+  position:fixed;
+  top:calc(var(--safe-top) + 12px);
+  left:50%;
+  transform:translateX(-50%);
+  z-index:30;
+  display:flex;align-items:center;gap:8px;
+  flex-wrap:nowrap;
+  padding:6px 10px;
+  width:calc(100% - 24px);
+  max-width:700px;
+  /* 液态玻璃背景：多层叠加模拟 iOS 26 效果 */
+  background:
+    linear-gradient(135deg,
+      rgba(255,255,255,0.13) 0%,
+      rgba(255,255,255,0.06) 40%,
+      rgba(var(--accent-rgb),0.10) 70%,
+      rgba(var(--accent2-rgb),0.07) 100%
+    );
+  backdrop-filter:blur(40px) saturate(1.8) brightness(1.05);
+  -webkit-backdrop-filter:blur(40px) saturate(1.8) brightness(1.05);
+  border:1px solid rgba(255,255,255,0.22);
+  border-top:1px solid rgba(255,255,255,0.32);
+  border-radius:999px;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.45),
+    0 2px 8px rgba(0,0,0,0.25),
+    0 0 0 0.5px rgba(255,255,255,0.08) inset,
+    0 1px 0 rgba(255,255,255,0.18) inset;
+  transition:all 0.28s cubic-bezier(0.2,0,0.2,1);
+}
+/* search-focused bar border: handled by bar slide-in */
+
+/* 两个子行合并为同级 flex 子项 */
 .bar-top{display:contents}
 .bar-bottom{display:contents}
 .bar-right{display:contents}
 
-.brand{font-size:20px;font-weight:900;white-space:nowrap;letter-spacing:0.5px;flex-shrink:0}
+.brand{font-size:18px;font-weight:900;white-space:nowrap;letter-spacing:0.5px;flex-shrink:0}
 .brand b{background:var(--accent-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 
-/* 搜索框：渐变光晕描边（外层渐变描边 + 内层纯色，聚焦时光晕增强） */
+/* 搜索框：无边框风格，融入玻璃底 */
 .search-wrap{
   position:relative;flex:1;min-width:0;
   border-radius:calc(var(--radius-full) + 1px);
@@ -378,13 +429,20 @@ html.search-focused .bar {
   box-shadow:0 1px 4px rgba(0,0,0,.2);
 }
 
-/* Primary 搜索按钮 */
+/* Primary 搜索按钮 — 玻璃态高亮 */
 .btn.primary{
-  background:var(--accent);
+  background:linear-gradient(135deg,
+    rgba(var(--accent-rgb),0.85) 0%,
+    rgba(var(--accent2-rgb),0.7) 100%);
   border:1px solid rgba(var(--accent-rgb),.5);
+  border-top:1px solid rgba(255,255,255,0.22);
   color:#fff;font-weight:800;
   padding:0 18px;
-  box-shadow:0 2px 10px rgba(var(--accent-rgb),.3);
+  box-shadow:
+    0 2px 10px rgba(var(--accent-rgb),.35),
+    0 1px 0 rgba(255,255,255,0.14) inset;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
 }
 .btn.primary:active{
   box-shadow:0 1px 5px rgba(var(--accent-rgb),.2);
@@ -393,66 +451,344 @@ html.search-focused .bar {
 /* 图标按钮 */
 .btn-icon{width:40px;height:40px;padding:0;min-width:unset;font-size:17px}
 
-/* ========== 站点 Tabs / 分类 Chips ========== */
-/* 导航行：安静文字源 + 实心胶囊分类（方案A） */
+/* ========== 站源 / 分类导航区 ========== */
+
+/* navrow：回归普通流，只包裹 chips 分类行（留在页面顶部区域） */
 .navrow{
-  position:relative;z-index:20;
+  position:relative;
+  z-index:20;
   display:block;
-  padding:6px 0 14px;
+  padding:4px 0 10px;
+  transition:filter .25s ease,opacity .25s ease;
 }
-/* 站源：安静文字 Tab 行，选中加下划线 */
+.navrow.blurred .src-row{
+  filter:blur(8px);
+  opacity:.4;
+  pointer-events:none;
+}
+.navrow.blurred .chips{
+  filter:blur(8px);
+  opacity:.4;
+  pointer-events:none;
+}
+
+/* ===== 底部联体左半：站源选择器（收起只显示当前站，点击展开）===== */
 .src-row{
-  display:flex;gap:18px;overflow-x:auto;scrollbar-width:none;
+  position:relative;
+  display:flex;
+  gap:0;
+  overflow:hidden;
+  scrollbar-width:none;
   -webkit-overflow-scrolling:touch;
-  padding:0 var(--gap) 9px;
+  pointer-events:auto;
+  /* 联体左半：无独立外壳，背景/边框/圆角全由 .bottom-dock 承担 */
+  background:transparent;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  padding:0;
+  justify-content:center;
+  align-items:center;
+  /* 宽度动画：收起→展开 */
+  max-width:150px;
+  height:50px;
+  transition:
+    max-width .38s cubic-bezier(0.34,1.2,0.64,1),
+    opacity .2s ease;
+  cursor:pointer;
+}
+/* 展开态 */
+.src-row.expanded{
+  max-width:calc(100vw - 80px);
+  overflow-x:auto;
+  cursor:default;
+  padding:0 10px;
+  gap:6px;
+  justify-content:flex-start;
+  touch-action:pan-x;
 }
 .src-row::-webkit-scrollbar{display:none}
-.src-tab{
-  position:relative;white-space:nowrap;flex-shrink:0;cursor:pointer;
-  font-size:15px;font-weight:700;color:var(--muted);
-  padding:2px 0 8px;background:none;border:0;
-  transition:color .15s;
-}
-.src-tab.on{color:#fff;font-weight:900}
-.src-tab.on::after{
-  content:"";position:absolute;left:0;right:0;bottom:0;height:3px;border-radius:3px;
-  background:linear-gradient(90deg,var(--accent2),var(--accent));
-}
-.src-tab:active{opacity:.7}
-.src-sep{height:1px;background:rgba(255,255,255,.12);margin:0 var(--gap) 10px}
 
-/* 分类：实心胶囊，醒目层级 */
+/* search-focused src-row: handled by bottom-dock opacity */
+
+/* 站源 tab 胶囊 — 所有项默认无轮廓，融入外壳 */
+.src-tab{
+  position:relative;
+  white-space:nowrap;
+  flex-shrink:0;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:600;
+  color:rgba(255,255,255,0.50);
+  padding:7px 18px;
+  background:transparent;
+  border:1px solid transparent;
+  border-radius:var(--radius-full);
+  transition:all .2s cubic-bezier(0.2,0,0.2,1);
+  /* 收起时：隐藏非选中项，彻底脱离 flex 空间 */
+  opacity:0;
+  pointer-events:none;
+  max-width:0;
+  width:0;
+  padding-left:0;
+  padding-right:0;
+  margin:0;
+  border-width:0;
+  overflow:hidden;
+}
+/* 收起时只显示选中项 */
+.src-tab.on{
+  color:#fff;
+  font-weight:800;
+  opacity:1;
+  pointer-events:auto;
+  max-width:100px;
+  width:auto;
+  min-width:0;
+  height:50px;
+  padding:0 22px;
+  margin:0;
+  text-align:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  /* 收起时：融入外壳 */
+  background:transparent;
+  border-color:transparent;
+  box-shadow:none;
+  border-radius:999px;
+  line-height:1;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  /* 收起态隐藏站名文字，只显示图标 */
+  font-size:0;
+}
+/* 收起态图标：信号塔/多源 */
+.src-tab.on::before{
+  content:'';
+  display:inline-block;
+  flex-shrink:0;
+  width:20px;
+  height:20px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.9)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='7' height='7' rx='1.5'/%3E%3Crect x='14' y='3' width='7' height='7' rx='1.5'/%3E%3Crect x='3' y='14' width='7' height='7' rx='1.5'/%3E%3Crect x='14' y='14' width='7' height='7' rx='1.5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:contain;
+}
+/* 展开态才给内层胶囊自己的样式 */
+.src-row.expanded .src-tab.on{
+  width:auto;
+  padding:14px 22px;
+  border-radius:var(--radius-full);
+  background:linear-gradient(135deg,
+    rgba(var(--accent-rgb),0.32) 0%,
+    rgba(var(--accent2-rgb),0.18) 100%);
+  border-color:rgba(var(--accent-rgb),0.50);
+  box-shadow:
+    0 4px 18px rgba(var(--accent-rgb),0.30),
+    0 1px 0 rgba(255,255,255,0.16) inset;
+  /* 展开态恢复文字 */
+  font-size:16px;
+  gap:0;
+}
+/* 展开态隐藏图标 */
+.src-row.expanded .src-tab.on::before{
+  display:none;
+}
+.src-row.expanded .src-tab{
+  border-radius:var(--radius-full);
+  width:auto;
+  padding:14px 22px;
+  background:transparent;
+  border-color:transparent;
+}
+/* 展开态：所有 tab 可见 */
+.src-row.expanded .src-tab{
+  opacity:1;
+  pointer-events:auto;
+  max-width:160px;
+  padding:14px 22px;
+  border-radius:var(--radius-full);
+  width:auto;
+  background:transparent;
+  border-color:transparent;
+  font-size:16px;
+}
+/* 展开态非选中项：纯文字，无轮廓 */
+.src-row.expanded .src-tab:not(.on){
+  color:rgba(255,255,255,0.50);
+  background:transparent;
+  border-color:transparent;
+  box-shadow:none;
+}
+.src-tab:active{opacity:.70 !important;transform:scale(.94)}
+
+/* 收起时的点击提示：轻微脉冲 */
+@keyframes srcPulse{
+  0%{box-shadow:0 1px 0 rgba(255,255,255,0.18) inset,0 -1px 0 rgba(255,255,255,0.06) inset,0 20px 56px rgba(0,0,0,0.52),0 6px 20px rgba(0,0,0,0.32)}
+  50%{box-shadow:0 1px 0 rgba(255,255,255,0.18) inset,0 -1px 0 rgba(255,255,255,0.06) inset,0 20px 56px rgba(0,0,0,0.52),0 6px 20px rgba(0,0,0,0.32),0 0 0 4px rgba(var(--accent-rgb),0.18)}
+  100%{box-shadow:0 1px 0 rgba(255,255,255,0.18) inset,0 -1px 0 rgba(255,255,255,0.06) inset,0 20px 56px rgba(0,0,0,0.52),0 6px 20px rgba(0,0,0,0.32)}
+}
+
+/* 分隔线隐藏 */
+.src-sep{display:none}
+
+/* ===== 底部联体胶囊容器：站源（左）+ 搜索（右）合并为一个胶囊 ===== */
+.bottom-dock{
+  position:fixed;
+  bottom:calc(var(--safe-bottom) + 14px);
+  left:50%;
+  transform:translateX(-50%);
+  z-index:35;
+  display:flex;
+  align-items:center;
+  gap:0;
+  pointer-events:none;
+  /* 联体外壳：液态玻璃底坞 */
+  background:
+    linear-gradient(160deg,
+      rgba(255,255,255,0.15) 0%,
+      rgba(255,255,255,0.07) 45%,
+      rgba(var(--accent-rgb),0.10) 80%,
+      rgba(var(--accent2-rgb),0.07) 100%
+    );
+  backdrop-filter:blur(44px) saturate(2.0) brightness(1.08);
+  -webkit-backdrop-filter:blur(44px) saturate(2.0) brightness(1.08);
+  border:1px solid rgba(var(--accent-rgb),0.55);
+  border-top:1px solid rgba(var(--accent-rgb),0.70);
+  border-radius:999px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.18) inset,
+    0 -1px 0 rgba(255,255,255,0.06) inset,
+    0 20px 56px rgba(0,0,0,0.52),
+    0 6px 20px rgba(0,0,0,0.32);
+  height:50px;
+  overflow:hidden;
+  transition:max-width .38s cubic-bezier(0.34,1.2,0.64,1), border-color .2s ease;
+}
+/* 展开态：去掉 accent 描边，换回通用玻璃描边 */
+.bottom-dock.expanded{
+  border-color:rgba(255,255,255,0.20);
+  border-top-color:rgba(255,255,255,0.32);
+}
+
+/* 联体中间分隔线 */
+.dock-sep{
+  width:1px;
+  height:28px;
+  background:rgba(255,255,255,0.18);
+  flex-shrink:0;
+  pointer-events:none;
+}
+
+/* ===== 搜索胶囊（右侧，联体右半） ===== */
+.search-pill{
+  pointer-events:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:76px;height:50px;
+  border-radius:0;
+  background:transparent;
+  border:0;
+  cursor:pointer;
+  transition:background .18s cubic-bezier(0.2,0,0.2,1);
+  flex-shrink:0;
+}
+.search-pill:active{background:rgba(255,255,255,0.10)}
+.search-pill-icon{
+  background:transparent;border:0;padding:0;
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.80);
+  cursor:pointer;
+}
+
+
+
+/* 底栏搜索框 */
+.src-search-inner{
+  flex:1;min-width:0;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:999px;
+  padding:0 8px 0 14px;
+  height:36px;
+  transition:border-color .18s;
+}
+.src-search-inner:focus-within{
+  border-color:rgba(var(--accent-rgb),0.55);
+  background:rgba(255,255,255,0.10);
+}
+.src-search-inner input{
+  flex:1;min-width:0;background:transparent;border:0;outline:0;
+  color:#fff;font-size:15px;
+}
+.src-search-inner input::placeholder{color:rgba(255,255,255,0.38)}
+.src-cancel-btn{
+  flex-shrink:0;
+  background:transparent;border:0;
+  color:rgba(255,255,255,0.65);
+  font-size:13px;font-weight:600;
+  padding:6px 4px 6px 8px;
+  cursor:pointer;white-space:nowrap;
+}
+
+/* 搜索提交按钮 */
+.src-search-submit{
+  flex-shrink:0;
+  width:32px;height:32px;padding:0;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,rgba(var(--accent-rgb),0.85),rgba(var(--accent2-rgb),0.7));
+  border:1px solid rgba(var(--accent-rgb),.5);
+  border-radius:999px;
+  color:#fff;cursor:pointer;
+}
+.src-search-submit:active{opacity:.75}
+
+/* 分类 chips：正常流，在 navrow 内 */
 .chips{
-  display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  scrollbar-width:none;
   -webkit-overflow-scrolling:touch;
   padding:0 var(--gap);
 }
 .chips::-webkit-scrollbar{display:none}
-.navrow{transition:filter .25s ease,opacity .25s ease}
-.navrow.blurred{filter:blur(8px);opacity:.4;pointer-events:none}
-/* 搜索中：页面内容区高斯模糊 */
+
+/* 搜索中：内容模糊 */
 #content{transition:filter .25s ease,opacity .25s ease;min-height:calc(100vh - 160px)}
 #content.searching{filter:blur(6px);opacity:.5;pointer-events:none}
-/* 搜索时整个页面模糊遮罩（不模糊 .bar，保持搜索框可见且浮在遮罩之上） */
 .app{transition:filter .28s ease}
-.app.searching .navrow,
+.app.searching .src-row,
 .app.searching #status,
 .app.searching #content{filter:blur(8px)}
+
 .chip{
-  white-space:nowrap;cursor:pointer;flex-shrink:0;
-  font-size:12px;font-weight:700;color:var(--muted);
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  white-space:nowrap;
+  cursor:pointer;
+  flex-shrink:0;
+  font-size:12px;
+  font-weight:600;
+  color:#fff;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.11);
   border-radius:var(--radius-full);
-  padding:6px 12px;
+  padding:5px 13px;
   transition:var(--transition-fast);
 }
 .chip.active{
-  color:#1a1206;font-weight:900;
+  color:#fff;
+  font-weight:800;
   background:linear-gradient(135deg,var(--accent2),var(--accent));
   border-color:transparent;
-  box-shadow:0 3px 12px rgba(var(--accent-rgb),.35);
+  box-shadow:0 3px 12px rgba(var(--accent-rgb),.38);
 }
-.chip:active{opacity:.85;transform:scale(.96)}
+.chip:active{opacity:.82;transform:scale(.95)}
 
 .status{display:none}
 
@@ -1152,7 +1488,19 @@ body:has(.sheet.active) #backTop{opacity:0!important;pointer-events:none!importa
 </div>
 </div>
 <div class="navrow">
-  <div class="src-row" id="srcRow"></div>
+  <!-- 底部联体胶囊：站源（左）+ 搜索（右）-->
+  <div class="bottom-dock" id="bottomDock">
+    <!-- 左：站源切换 -->
+    <div class="src-row" id="srcRow"></div>
+    <!-- 中：分隔线 -->
+    <div class="dock-sep" id="dockSep"></div>
+    <!-- 右：搜索按钮 -->
+    <div class="search-pill" id="searchPill">
+      <button class="search-pill-icon" id="srcSearchBtn" title="搜索">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </div>
+  </div>
   <div class="src-sep"></div>
   <div class="chips" id="chips"></div>
 </div>
@@ -1646,18 +1994,65 @@ function renderTabs(){
   const row=$('#srcRow');
   if(!row)return;
   row.innerHTML=SITES.map(s=>`<button class="src-tab ${activeSite===s.id?'on':''}" data-id="${s.id}">${s.name}</button>`).join('');
-  row.querySelectorAll('.src-tab').forEach(b=>b.onclick=async()=>{
-    if(b.dataset.id===activeSite)return;
+
+  /* ── 收起/展开逻辑 ──
+     收起态：点击整个坞 → 展开；展开态：点击某个 tab 切换站源 / 点击坞外 → 收起 */
+  const _dock=document.getElementById('bottomDock');
+  function collapse(){
+    row.classList.remove('expanded');
+    if(_dock)_dock.classList.remove('expanded');
+    row.style.cursor='pointer';
+  }
+  function expand(){
+    row.classList.add('expanded');
+    if(_dock)_dock.classList.add('expanded');
+    row.style.cursor='default';
+    // 让选中项滚入可视区
+    const on=row.querySelector('.src-tab.on');
+    if(on)try{on.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})}catch(e){}
+  }
+
+  // 点击坞本体（收起态）→ 展开
+  row.onclick=function(e){
+    if(!row.classList.contains('expanded')){
+      expand();
+      e.stopPropagation();
+      return;
+    }
+  };
+
+  // 点击具体 tab（展开态）→ 切换站源 + 收起
+  row.querySelectorAll('.src-tab').forEach(b=>b.onclick=async(e)=>{
+    if(!row.classList.contains('expanded')){
+      // 未展开：先展开，不切换
+      expand();
+      e.stopPropagation();
+      return;
+    }
+    e.stopPropagation();
+    if(b.dataset.id===activeSite){ collapse(); return; }
     _catActive=true;
     activeSite=b.dataset.id;
-    renderTabs();
-    chips.innerHTML='';                          // 先清空旧分类
+    collapse();            // 选完立刻收起
+    renderTabs();          // 会重建 DOM，同时 collapse（默认不带 expanded）
+    chips.innerHTML='';
     content.innerHTML='<div class="empty">加载中…</div>';
     const s=site();
-    const cats=await ensureCats(s);              // 自动抓取该站真实分类
+    const cats=await ensureCats(s);
     activeCat=firstRealCat(cats);
-    page=1;renderChips();loadCategory()
-  })
+    page=1;renderChips();loadCategory();
+  });
+
+  // 点击坞外 → 收起（联体胶囊内的分隔线/搜索按钮不算坞外）
+  const dock=document.getElementById('bottomDock');
+  function outsideClick(e){
+    if(!row.classList.contains('expanded'))return;
+    if(!(dock||row).contains(e.target)){ collapse(); }
+  }
+  // 移除旧监听，防止叠加
+  if(row._outsideClick) document.removeEventListener('click',row._outsideClick,true);
+  row._outsideClick=outsideClick;
+  document.addEventListener('click',outsideClick,true);
 }
 // 搜索代际计数器：每次「离开搜索结果页」就 +1，让仍在后台跑的旧搜索结果晚到也不会再去刷新当前页面
 let _searchGen=0,_catGen=0;
@@ -2974,18 +3369,25 @@ kw.addEventListener('focus',()=>{
   };
 })();
 window._searchHistUpdate=window._searchHistUpdate||function(){};
-document.getElementById('searchFocusMask').addEventListener('pointerdown',()=>{
+function _closeSearchBar(){
   hideSugg();
   kw.blur();
-  if(window._searchHistUpdate)document.getElementById('searchHistory').classList.remove('show');
-  if (document.documentElement.classList.contains('search-focused') && !_inSearchMode()) history.back();
-  else document.documentElement.classList.remove('search-focused');
+  const shEl=document.getElementById('searchHistory');
+  if(shEl)shEl.classList.remove('show');
+  document.documentElement.classList.remove('search-focused');
+  if(location.hash==='#search'&&!_inSearchMode())
+    history.replaceState({wo:'home'},'',location.pathname+location.search);
+}
+document.getElementById('searchFocusMask').addEventListener('pointerdown',function(e){
+  e.preventDefault();
+  e.stopPropagation();
+  _closeSearchBar();
+  // 吞掉这次抬手触发的后续 click，防止穿透点击到背景内容
+  function swallow(ev){ ev.preventDefault(); ev.stopPropagation(); }
+  document.addEventListener('click',swallow,{capture:true,once:true});
+  setTimeout(()=>document.removeEventListener('click',swallow,true),400);
 });
-kw.addEventListener('keydown',e=>{if(e.key==='Escape'){
-  hideSugg();kw.blur();
-  if (document.documentElement.classList.contains('search-focused') && !_inSearchMode()) history.back();
-  else document.documentElement.classList.remove('search-focused');
-}});
+kw.addEventListener('keydown',e=>{if(e.key==='Escape')_closeSearchBar()});
 // 只有点击搜索区域之外才收起联想（点击联想项由其自身的 click 处理）
 document.addEventListener('pointerdown',e=>{if(!searchForm.contains(e.target))hideSugg()},true);
 const AGG_ICON=`<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M5 6l7 6-7 6"/><path d="M12 6l7 6-7 6"/></svg>`;
@@ -2993,6 +3395,19 @@ const SINGLE_ICON=`<svg width="17" height="17" viewBox="0 0 24 24" fill="none" s
 aggBtn.innerHTML=AGG_ICON;
 aggBtn.onclick=()=>{aggregate=!aggregate;aggBtn.innerHTML=aggregate?AGG_ICON:SINGLE_ICON};
 window.__woClose=closeDetail;
+
+/* ===== 底部搜索胶囊：点击 → focus 顶部原版搜索框 ===== */
+(function(){
+  const srcSearchBtn = document.getElementById('srcSearchBtn');
+  const srcRow = document.getElementById('srcRow');
+  if(!srcSearchBtn) return;
+  srcSearchBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    srcRow.classList.remove('expanded');
+    // 直接 focus 原版 kw，触发原有 search-focused 逻辑
+    setTimeout(()=>{ kw.focus(); kw.select(); }, 60);
+  });
+})();
 
 // ========== 回顶按钮（可拖动 · 贴边吸附 · 记忆位置）==========
 (function(){
