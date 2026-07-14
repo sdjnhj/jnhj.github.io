@@ -128,8 +128,8 @@
 /* ============ tokens ============ */
 :root{
   --ink:#080A0F;
-  --panel:rgba(16,19,27,0.92);
-  --panel-2:rgba(24,28,38,0.95);
+  --panel:rgba(24,24,26,0.9);
+  --panel-2:rgba(32,32,35,0.94);
   --line:rgba(255,255,255,0.10);
   --text:#ECF1F6;
   --muted:#9AA6B4;
@@ -188,15 +188,27 @@ body::before{
   content:'';
   position:fixed;
   top:0; left:0; right:0; bottom:0;
-  z-index:-1;
-  background:linear-gradient(180deg,
-    rgba(6,8,13,0.78) 0%,
-    rgba(6,8,13,0.88) 45%,
-    rgba(6,8,13,0.94) 100%);
+  z-index:-2;
+  /* 官方红黑质感：近黑打底，右上和左下各一抹极淡的 YouTube 红辉光 */
+  background:
+    radial-gradient(75% 45% at 88% -6%, rgba(240,69,58,0.14), transparent 60%),
+    radial-gradient(70% 45% at 6% 106%, rgba(240,69,58,0.10), transparent 58%),
+    linear-gradient(180deg, #0f0f10 0%, #0c0c0d 50%, #090909 100%);
   pointer-events:none;
 }
-/* 浏览器预览没有壁纸，就别压了 */
-html:not(.fm-native) body::before{ display:none; }
+/* 极缓慢流动的红色辉光，几乎察觉不到，只是让背景不死板 */
+body::after{
+  content:'';
+  position:fixed;
+  top:-15%; left:-15%; right:-15%; bottom:-15%;
+  z-index:-1;
+  background:radial-gradient(38% 22% at 78% 20%, rgba(240,69,58,0.08), transparent 70%);
+  filter:blur(40px);
+  pointer-events:none;
+  animation:ytglow 30s ease-in-out infinite alternate;
+}
+@keyframes ytglow{ 0%{ transform:translate(0,0); } 100%{ transform:translate(-4%, 3%); } }
+@media (prefers-reduced-motion: reduce){ body::after{ animation:none; } }
 
 img{ border:0; display:block; }
 button,input{ font:inherit; color:inherit; }
@@ -208,7 +220,7 @@ button{ background:none; border:0; cursor:pointer; }
   padding:10px 12px 8px;
   padding-top:var(--safe-top);
   padding-left:12px; padding-right:12px;
-  background:rgba(8,10,15,0.92);
+  background:rgba(14,14,15,0.82);
   border-bottom:1px solid var(--line);
 }
 @supports (backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px)){
@@ -341,6 +353,38 @@ body.searching .tabs{ opacity:.45; transition:opacity .2s ease; }
   font-size:14px;
 }
 .search input:focus{ border-color:var(--amber); }
+/* 系统自带的清除按钮：大小由内核决定，CSS 改不动，只能藏掉自己画 */
+.search input::-webkit-search-cancel-button,
+.search input::-webkit-search-decoration{
+  -webkit-appearance:none;
+  appearance:none;
+  display:none;
+}
+.search input{ padding-right:76px; }   /* 给清空 + 搜索两个按钮腾位置 */
+
+.search .clr{
+  position:absolute;
+  top:5px; right:40px;
+  width:32px; height:32px;
+  border-radius:50%;
+  color:var(--muted);
+  display:none;
+  align-items:center; justify-content:center;
+  padding:0;
+}
+.search .clr.on{ display:inline-flex; }
+.search .clr:active{ color:var(--text); transform:scale(0.9); }
+.search .clr:focus{ color:var(--amber); }
+
+/* 两个按钮之间加一道细分隔，视觉上不糊成一坨 */
+.search .clr.on + .go::before{
+  content:'';
+  position:absolute;
+  left:-4px; top:8px;
+  width:1px; height:16px;
+  background:rgba(255,255,255,0.14);
+}
+
 .search .go{
   position:absolute;
   top:5px; right:6px;
@@ -441,7 +485,7 @@ body.searching .tabs{ opacity:.45; transition:opacity .2s ease; }
   white-space:nowrap;
   transition:background .16s ease, color .16s ease;
 }
-.tab.on{ background:var(--text); color:#0A0D13; border-color:var(--text); font-weight:600; }
+.tab.on{ background:var(--signal); color:#fff; border-color:var(--signal); font-weight:700; box-shadow:0 3px 12px rgba(240,69,58,0.3); }
 .tab:focus{ border-color:var(--amber); color:var(--amber); }
 .tab.on:focus{ color:#0A0D13; background:var(--amber); }
 
@@ -630,6 +674,95 @@ body.searching .tabs{ opacity:.45; transition:opacity .2s ease; }
   .skel .card-inner{ animation:none; }
 }
 
+/* 自绘下拉：原生 select 在 WebView 里弹的是系统对话框（白底黑字），
+   CSS 完全改不动，只能藏掉 select、自己画一个触发器 + 底部选择浮层。 */
+.picker{
+  width:100%; box-sizing:border-box;
+  height:46px; padding:0 40px 0 14px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.12);
+  background:var(--solid-2);
+  color:var(--text);
+  font-size:14px;
+  text-align:left;
+  position:relative;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.picker:focus{ border-color:var(--amber); background:var(--solid-3); }
+.picker::after{
+  content:'';
+  position:absolute; right:16px; top:50%;
+  width:7px; height:7px;
+  margin-top:-5px;
+  border-right:1.6px solid var(--muted);
+  border-bottom:1.6px solid var(--muted);
+  transform:rotate(45deg);
+}
+
+/* 底部弹出的选择浮层 */
+.opt-mask{
+  position:fixed; inset:0;
+  top:0; left:0; right:0; bottom:0;
+  z-index:200;
+  background:rgba(0,0,0,0.6);
+  opacity:0; visibility:hidden;
+  transition:opacity .22s ease;
+}
+.opt-mask.on{ opacity:1; visibility:visible; }
+
+.opt-sheet{
+  position:fixed;
+  left:0; right:0; bottom:0;
+  z-index:201;
+  background:#12151D;
+  border-radius:20px 20px 0 0;
+  padding:8px 0 0;
+  padding-bottom:calc(var(--safe-bottom) + 8px);
+  transform:translateY(100%);
+  transition:transform .28s cubic-bezier(.22,1,.36,1);
+  max-height:70vh;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.opt-sheet.on{ transform:translateY(0); }
+@media (prefers-reduced-motion: reduce){
+  .opt-mask, .opt-sheet{ transition:none; }
+}
+
+.opt-grip{
+  width:36px; height:4px;
+  border-radius:2px;
+  background:rgba(255,255,255,0.18);
+  margin:6px auto 10px;
+}
+.opt-title{
+  font-size:13px; color:var(--muted);
+  padding:0 20px 10px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.opt-item{
+  display:block; width:100%;
+  padding:15px 20px;
+  text-align:left;
+  font-size:15px;
+  color:var(--text);
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  position:relative;
+}
+.opt-item:last-child{ border-bottom:0; }
+.opt-item.on{ color:var(--signal); font-weight:600; }
+.opt-item.on::after{
+  content:'';
+  position:absolute; right:22px; top:50%;
+  width:6px; height:11px;
+  margin-top:-7px;
+  border-right:2px solid var(--signal);
+  border-bottom:2px solid var(--signal);
+  transform:rotate(45deg);
+}
+.opt-item:focus{ background:rgba(0,174,236,0.12); }
+
+
 .spinner{
   width:22px; height:22px; margin:0 auto 12px;
   border-radius:50%;
@@ -764,6 +897,7 @@ body.locked{ overflow:hidden; }
   color:#B7C2CE;
   margin-bottom:8px;
 }
+.field select{ display:none; }        /* 藏掉原生 select，保留元素：getVal/setVal 照旧 */
 .field input, .field select{
   width:100%; box-sizing:border-box;
   height:46px; padding:0 14px;
@@ -1071,6 +1205,13 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
   </div>
 </section>
 
+<div class="opt-mask" id="optMask"></div>
+<div class="opt-sheet" id="optSheet">
+  <div class="opt-grip"></div>
+  <div class="opt-title" id="optTitle"></div>
+  <div id="optList"></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1360,11 +1501,10 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
   ];
   var LIST_KEYS = ['playlistRenderer', 'compactPlaylistRenderer', 'gridPlaylistRenderer'];
 
+  function ytThumb(id, size){ return 'https://i.ytimg.com/vi/' + id + '/' + (size||'mqdefault') + '.jpg'; }
   function thumbOf(r, id, kind) {
-    var arr = get(r, 'thumbnail.thumbnails');
-    if (arr && arr.length) return arr[arr.length - 1].url;
-    if (kind === 'list') return 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
-    return 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+    // 列表卡片用 mqdefault：比 hqdefault 小一半，滑动更快，清晰度对卡片够了
+    return ytThumb(id, 'mqdefault');
   }
 
   function chanOf(r) {
@@ -1398,7 +1538,7 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
       time: text(r.publishedTimeText),
       live: badges.indexOf('LIVE') !== -1,
       pic: thumbOf(r, id, 'video'),
-      wall: 'https://i.ytimg.com/vi/' + id + '/maxresdefault.jpg',
+      wall: ytThumb(id, 'maxresdefault'),
       url: YT + '/watch?v=' + id
     };
   }
@@ -1416,8 +1556,8 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
       title: text(r.title),
       author: text(r.longBylineText) || text(r.shortBylineText),
       count: count,
-      pic: (pic && pic.length ? pic[pic.length - 1].url : (vid ? 'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg' : '')),
-      wall: vid ? 'https://i.ytimg.com/vi/' + vid + '/maxresdefault.jpg' : '',
+      pic: (vid ? ytThumb(vid, 'mqdefault') : (pic && pic.length ? pic[pic.length - 1].url : '')),
+      wall: vid ? ytThumb(vid, 'maxresdefault') : '',
       url: YT + '/playlist?list=' + id
     };
   }
@@ -1886,8 +2026,8 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
   /* 硬编码 key 已经会被风控挡掉：先抓 watch 页取真实 INNERTUBE_API_KEY 和 visitorData */
   var ytcfgCache = { key: '', visitor: '', ts: 0 };
 
-  async function ytcfg(videoId) {
-    if (ytcfgCache.key && (Date.now() - ytcfgCache.ts) < 1800000) return ytcfgCache;
+  async function ytcfg(videoId, force) {
+    if (!force && ytcfgCache.key && ytcfgCache.visitor && (Date.now() - ytcfgCache.ts) < 1800000) return ytcfgCache;
     try {
       var html = await req(videoId ? (YT + '/watch?v=' + videoId) : (YT + '/'), {
         headers: { 'User-Agent': DEF_UA, 'Accept-Language': prefs.hl },
@@ -2062,15 +2202,20 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
 
     var list = PLAYER_CLIENTS;
     if (prefs.client && prefs.client !== 'auto') {
-      list = PLAYER_CLIENTS.filter(function (x) { return x.name === prefs.client; });
-      if (!list.length) list = PLAYER_CLIENTS;
+      var only = PLAYER_CLIENTS.filter(function (x) { return x.name === prefs.client; });
+      // 锁定的客户端排前面，但后面仍跟上其余客户端兜底 ——
+      // 否则锁定的那个一 ERROR 就直接退 NewPipe，白白丢掉能用的 ANDROID_VR
+      if (only.length) {
+        var rest = PLAYER_CLIENTS.filter(function (x) { return x.name !== prefs.client; });
+        list = only.concat(rest);
+      }
     }
 
     // visitorData 是拿到分离流的前提，裸打（不带 visitor）几乎必然 LOGIN_REQUIRED。
     // 所以直接等 ytcfg，别浪费那次注定失败的裸打往返。
     // ytcfg 缓存 30 分钟：只有冷启动第一次要等 watch 页，之后命中缓存、瞬间返回。
     var cfg = await ytcfg(videoId);
-    var bareCfg = { key: KEY, visitor: '' };
+    var refreshed = false;
 
     for (i = 0; i < list.length; i++) {
       c = list[i];
@@ -2078,12 +2223,20 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
       json = null;
       try { json = await playerData(videoId, c, cfg); } catch (e) {}
 
-      // 带 visitor 反被拒时（visitorData 可能过期），裸打兜一次底
-      if (!json || !json.streamingData) {
-        try { json = await playerData(videoId, c, bareCfg); } catch (e2) {}
+      status = get(json, 'playabilityStatus.status');
+
+      // LOGIN_REQUIRED / 空响应 = visitorData 多半过期了。
+      // 强制重抓一次 visitorData 再打（不是裸打——裸打必然 LOGIN_REQUIRED，白费）。
+      // 只刷一次，刷完这一轮所有客户端都用新的。
+      if ((!json || !json.streamingData || status === 'LOGIN_REQUIRED') && !refreshed) {
+        refreshed = true;
+        try {
+          cfg = await ytcfg(videoId, true);
+          json = await playerData(videoId, c, cfg);
+          status = get(json, 'playabilityStatus.status');
+        } catch (e2) {}
       }
 
-      status = get(json, 'playabilityStatus.status');
       sd = json ? json.streamingData : null;
       if (!sd) {
         lastWhy.push(c.name + '：' + (status || '被拒'));
@@ -3064,6 +3217,72 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
     });
   }
 
+  /* ---------- 自绘下拉 ----------
+     原生 select 在 WebView 弹的是系统对话框（白底黑字），CSS 改不动。
+     所以：select 元素留在 DOM 里（隐藏），只接管它的交互 —— 
+     值的读写还是走 select，getVal/setVal 一行都不用改。 */
+  var optCur = null;
+
+  function pickerLabel(sel){
+    var o = sel.options[sel.selectedIndex];
+    return o ? o.textContent : '';
+  }
+
+  function buildPickers(){
+    var sels = document.querySelectorAll('.field select');
+    Array.prototype.forEach.call(sels, function(sel){
+      if(sel._picked) return;
+      sel._picked = true;
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'picker';
+      btn.textContent = pickerLabel(sel);
+      sel.parentNode.insertBefore(btn, sel);
+
+      sel._btn = btn;
+      btn.addEventListener('click', function(){ openPicker(sel); });
+    });
+  }
+
+  function syncPickers(){
+    var sels = document.querySelectorAll('.field select');
+    Array.prototype.forEach.call(sels, function(sel){
+      if(sel._btn) sel._btn.textContent = pickerLabel(sel);
+    });
+  }
+
+  function openPicker(sel){
+    optCur = sel;
+    var lab = sel.parentNode.querySelector('label');
+    $('optTitle').textContent = lab ? lab.textContent : '选择';
+
+    var list = $('optList');
+    list.replaceChildren();
+
+    Array.prototype.forEach.call(sel.options, function(o, i){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt-item' + (i === sel.selectedIndex ? ' on' : '');
+      b.textContent = o.textContent;
+      b.addEventListener('click', function(){
+        sel.selectedIndex = i;
+        if(sel._btn) sel._btn.textContent = o.textContent;
+        closePicker();
+      });
+      list.appendChild(b);
+    });
+
+    $('optMask').className = 'opt-mask on';
+    $('optSheet').className = 'opt-sheet on';
+  }
+
+  function closePicker(){
+    $('optMask').className = 'opt-mask';
+    $('optSheet').className = 'opt-sheet';
+    optCur = null;
+  }
+
   /* ---------- 设置 ---------- */
   async function loadPrefs() {
     var raw = await store.get('prefs');
@@ -3094,6 +3313,8 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
     setVal('client', prefs.client);
     setVal('dashmode', prefs.dashmode);
     setVal('inv', prefs.inv);
+    buildPickers();
+    syncPickers();
   }
 
   async function savePrefs() {
@@ -3109,6 +3330,7 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
     prefs.dashmode = getVal('dashmode') || 'pin';
     prefs.inv = getVal('inv').trim().replace(/\/+$/, '');
     await store.set('prefs', JSON.stringify(prefs));
+    syncPickers();
     toast('已保存');
     closeSheet();
     load(true);
@@ -3326,6 +3548,7 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
     switching = true;
 
     var t = TABS[next];
+    clearSearchBox();
     view.tab = t.id;
     view.kind = t.type;
     view.arg = t.arg;
@@ -3444,6 +3667,7 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
       b.className = 'tab' + (t.id === view.tab ? ' on' : '');
       b.textContent = t.name;
       b.addEventListener('click', function () {
+        clearSearchBox();
         view.tab = t.id;
         view.kind = t.type;
         view.arg = t.arg;
@@ -3546,6 +3770,7 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
       b.appendChild(document.createTextNode(w));
       b.addEventListener('click', function () {
         $('q').value = w;
+        syncClear();
         closeSug();
         doSearch();
       });
@@ -3579,8 +3804,14 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
     renderSug(history_, true);
   }
 
+  function syncClear() {
+    var c = $('clrBtn');
+    if (c) c.className = $('q').value ? 'clr on' : 'clr';
+  }
+
   function onType() {
     var q = $('q').value.trim();
+    syncClear();
     clearTimeout(sugTimer);
     if (!q) { showHistory(); return; }
 
@@ -3623,6 +3854,11 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
     return true;
   }
 
+  function clearSearchBox() {
+    var q = $('q'); if (q) q.value = '';
+    if (typeof syncClear === 'function') syncClear();
+    if (typeof closeSug === 'function') closeSug();
+  }
   function doSearch() {
     var q = $('q').value.trim();
     if (!q) return;
@@ -3641,6 +3877,13 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
   function bind() {
     on('goBtn', 'click', doSearch);
     on('q', 'input', onType);
+    on('clrBtn', 'click', function () {
+      var q = $('q');
+      q.value = '';
+      syncClear();
+      showHistory();     // 清空后顺手把历史亮出来
+      if (q.focus) q.focus();
+    });
     on('q', 'focus', showHistory);
     on('q', 'keydown', function (e) {
       if (sugKey(e)) return;
@@ -3669,11 +3912,13 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
     on('setBack', 'click', function () { closeSheet(); });
     on('netBack', 'click', function () { closeSheet(); });
     on('runDiag', 'click', runDiag);
+    on('optMask', 'click', closePicker);
     on('saveBtn', 'click', savePrefs);
     on('resetBtn', 'click', function () {
       setVal('hl', 'zh-CN'); setVal('gl', 'US'); setVal('ua', DEF_UA);
       setVal('quality', 'best'); setVal('wall', 'none'); setVal('engine', 'hls'); setVal('hlsmode', 'variant'); setVal('seg', 'gw'); setVal('client', 'auto');
       setVal('dashmode', 'pin'); setVal('inv', '');
+      syncPickers();
     });
     on('subBack', 'click', function () { exitSub(); });
     on('subPlay', 'click', function () {
