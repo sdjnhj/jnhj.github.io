@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN" class="" style="--safe-top: 0px;"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>bilibili</title>
@@ -1125,7 +1123,7 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
 .login.ok{ color:#57D9A3; border-color:rgba(87,217,163,0.3); }
 .login.bad{ color:#FF6B5E; border-color:rgba(255,107,94,0.3); }
 </style>
-</head>
+<style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"><style></style></head>
 
 <body>
 
@@ -1135,11 +1133,10 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
 <header class="top" id="top">
   <div class="top-row">
     <button class="brand" id="netBtn" aria-label="网络自检">
-      <span class="mark" id="netDot">
+      <span class="mark bad" id="netDot">
         <svg viewBox="0 0 36 28" width="32" height="25" aria-hidden="true">
           <!-- 天线 -->
-          <path d="M10 6 L6 2 M26 6 L30 2"
-                stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"></path>
+          <path d="M10 6 L6 2 M26 6 L30 2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"></path>
           <circle cx="6" cy="2" r="1.6" fill="currentColor"></circle>
           <circle cx="30" cy="2" r="1.6" fill="currentColor"></circle>
           <!-- 机身 -->
@@ -1182,7 +1179,7 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
     <div class="sug" id="sug"></div>
   </span>
 
-  <nav class="tabs" id="tabs"></nav>
+  <nav class="tabs" id="tabs"><button class="tab on">推荐</button><button class="tab">热门</button><button class="tab">排行榜</button><button class="tab">番剧</button><button class="tab">国创</button><button class="tab">电视剧</button><button class="tab">电影</button><button class="tab">纪录片</button><button class="tab">综艺</button><button class="tab">动画</button><button class="tab">鬼畜</button><button class="tab">舞蹈</button><button class="tab">游戏</button><button class="tab">知识</button><button class="tab">科技</button><button class="tab">美食</button><button class="tab">时尚</button><button class="tab">影视</button><button class="tab">音乐</button><button class="tab">直播</button></nav>
   <nav class="liveareas" id="liveAreas"></nav>
 
   <div class="subbar" id="subbar">
@@ -1209,7 +1206,7 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
 
 <main class="wrap" id="wrap">
   <div id="list" class="grid"></div>
-  <div id="state" class="state"></div>
+  <div id="state" class="state"><strong>没能连上 B 站</strong><div>Failed to fetch</div><div style="margin-top:8px">需要代理时请在 App 里配置。搜索/UP主需要 WBI 签名，失败多为网络问题。</div></div>
   <div id="more" class="more"></div>
 </main>
 
@@ -1231,7 +1228,7 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
 
     <div class="field">
       <label for="quality">画质</label>
-      <select id="quality">
+      <button type="button" class="picker">1080P（需登录）</button><select id="quality">
         <option value="127">最高（有 8K 就 8K）</option>
         <option value="120">4K（需大会员）</option>
         <option value="116">1080P60</option>
@@ -1244,7 +1241,7 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
 
     <div class="field">
       <label for="codec">编码</label>
-      <select id="codec">
+      <button type="button" class="picker">AVC / H.264（兼容性最好）</button><select id="codec">
         <option value="7">AVC / H.264（兼容性最好）</option>
         <option value="12">HEVC / H.265（省流，老设备可能解不了）</option>
         <option value="13">AV1（最省流，需新硬件）</option>
@@ -1253,7 +1250,7 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
 
     <div class="field">
       <label for="wall">播放页背景</label>
-      <select id="wall">
+      <button type="button" class="picker">视频封面（有氛围）</button><select id="wall">
         <option value="pic">视频封面（有氛围）</option>
         <option value="none">App 默认壁纸（干净）</option>
       </select>
@@ -2110,12 +2107,24 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
     var eps = j&&j.result&&j.result.episodes;
     if(!eps||!eps.length) throw new Error('拿不到剧集');
     var ep = eps[0];
-    var vitem = { kind:'video', aid:ep.aid, bvid:ep.bvid||'', cid:ep.cid, _dur:(ep.duration?Math.round(ep.duration/1000):0), title:item.title+' '+(ep.title||ep.long_title||''), pic:item.pic };
-    // 有多集就整季推送成多集
+    var vitem = { kind:'video', aid:ep.aid, bvid:ep.bvid||'', cid:ep.cid, epId:ep.id, _dur:(ep.duration?Math.round(ep.duration/1000):0), title:item.title+' '+(ep.title||ep.long_title||''), pic:item.pic };
+    // 有多集就整季推送成多集；单集（电影）直接解析起播
     if(eps.length>1 && native && fm.vodInline){
       await pgcInline(item, eps);
     } else {
-      await play(vitem);
+      // 注意：不能调 play()，此刻 playing 已是 true 会被挡；直接解析
+      var pd = await playInfo(vitem);
+      if(pd.dash){
+        var built = biliMpd(pd.dash, prefs.quality, prefs.codec);
+        var uri='data:application/dash+xml;base64,'+btoa(unescape(encodeURIComponent(built.xml)));
+        var art=resUrl(item.pic||''), wp=wallOf(item);
+        inlineMap={}; window.__fmWebHomeInlineResolver=function(ep2){ return {url:uri,format:'application/dash+xml',headers:{}}; };
+        await fm.vodInline({ vod_id:'pgc1_'+item.seasonId, vod_name:vitem.title, vod_pic:art, wallPic:wp, vod_play_from:'最高画质', mark:built.h+'P', episodes:[{name:built.h+'P',url:uri,resolve:true}] });
+        toast(built.h+'P');
+      } else if(pd.durl){
+        var artD=resUrl(item.pic||'');
+        await fm.play(gwUrl(pd.durl), vitem.title, { pic:artD, wallPic:wallOf(item), headers:{'User-Agent':DEF_UA,Referer:'https://www.bilibili.com/'} });
+      } else { throw new Error('无可用流'); }
     }
   }
 
@@ -2514,5 +2523,5 @@ html.no-css-functions .wrap{ padding-bottom:48px; }
   else{ var started=false; window.addEventListener('fmsdk',function(){ if(!started){started=true;boot();} }); setTimeout(function(){ if(!started){started=true;boot();} },1200); }
 })();
 </script>
-</body>
-</html>
+
+</body></html>
