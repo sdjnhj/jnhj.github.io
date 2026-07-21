@@ -50,7 +50,7 @@
             --text-sub: #8e8e93;
             --text-light: #636366;
             --divider: rgba(84, 84, 88, 0.30);
-            --shadow: 0 2px 10px rgba(0, 0, 0, 0.30);
+            --shadow: 0 2px 10px rgba(0, 0, 0.30);
             --shadow-hover: 0 4px 16px rgba(0, 0, 0.40);
             --bookmark-icon-bg: #2c2c2e;
         }
@@ -278,8 +278,6 @@
             overflow: hidden;
             transition: box-shadow 0.25s, transform 0.25s;
             flex-shrink: 0;
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
         }
         .bookmark-icon img {
             border-radius: calc(var(--radius-icon) - 2px);
@@ -427,26 +425,28 @@
             display: block;
             color: var(--text);
         }
-        /* 彻底修复移动端color取色器兼容 */
-        .color-input {
-            width: 100%;
-            height: 48px;
+        /* 十六进制颜色输入框 + 预览色块 */
+        .color-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .color-preview {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            border: 1px solid var(--divider);
+            flex-shrink: 0;
+        }
+        .hex-input {
+            flex: 1;
             padding: 6px 8px;
             border-radius: 8px;
             border: 1px solid var(--divider);
             background: transparent;
             color: var(--text);
             font-size: 12px;
-            -webkit-appearance: none;
-            appearance: none;
-            cursor: pointer;
-        }
-        input[type="color"]::-webkit-color-swatch-wrapper {
-            padding: 0;
-        }
-        input[type="color"]::-webkit-color-swatch {
-            border-radius: 6px;
-            border: none;
+            text-transform: lowercase;
         }
         .opacity-input {
             width: 100%;
@@ -537,7 +537,7 @@
                             <path d="M3 7V5a2 2 0 0 1 2-2h2" />
                             <path d="M17 3h2a2 2 0 0 1 2 2v2" />
                             <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
-                            <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                            <path d="M7 21H5a2 0 0 1-2-2v-2" />
                             <line x1="7" y1="12" x2="17" y2="12" />
                         </svg>
                     </button>
@@ -545,7 +545,6 @@
                 <!-- 合并单一多功能按钮 -->
                 <div class="combo-btn-wrap">
                     <button type="button" id="comboMainBtn" aria-label="标签/设置切换">
-                        <!-- 优化居中标签图标，双层方块对齐 -->
                         <svg class="icon-tab" viewBox="0 0 24 24">
                             <rect x="3" y="3" width="14" height="14" rx="3" />
                             <rect x="7" y="7" width="14" height="14" rx="3" />
@@ -569,25 +568,31 @@
     <!-- 右侧设置面板 -->
     <div class="bg-set-panel" id="bgSetPanel">
         <h3 class="panel-title">背景自定义设置</h3>
-        <div class="set-group toggle-btn-wrap">
+        <div class="toggle-btn-wrap">
             <label class="set-label" style="margin-bottom:0;">显示快捷图标</label>
             <div class="toggle-switch" id="toggleBookmarks"></div>
         </div>
-        <div class="set-group toggle-btn-wrap">
+        <div class="toggle-btn-wrap">
             <label class="set-label" style="margin-bottom:0;">显示添加按钮</label>
             <div class="toggle-switch" id="toggleAddBtn"></div>
         </div>
-        <div class="set-group toggle-btn-wrap">
+        <div class="toggle-btn-wrap">
             <label class="set-label" style="margin-bottom:0;">隐藏图标文字</label>
             <div class="toggle-switch" id="toggleLabelHide"></div>
         </div>
         <div class="set-group">
-            <label class="set-label">浅色模式背景色</label>
-            <input type="color" class="color-input" id="lightBgColor">
+            <label class="set-label">浅色背景色 #RRGGBB</label>
+            <div class="color-row">
+                <div class="color-preview" id="lightPreview"></div>
+                <input class="hex-input" id="lightHex" maxlength="7" placeholder="#f0f0f5">
+            </div>
         </div>
         <div class="set-group">
-            <label class="set-label">深色模式背景色</label>
-            <input type="color" class="color-input" id="darkBgColor">
+            <label class="set-label">深色背景色 #RRGGBB</label>
+            <div class="color-row">
+                <div class="color-preview" id="darkPreview"></div>
+                <input class="hex-input" id="darkHex" maxlength="7" placeholder="#000000">
+            </div>
         </div>
         <div class="set-group">
             <label class="set-label">浅色背景图</label>
@@ -605,7 +610,7 @@
         </div>
         <div class="set-group">
             <label class="set-label">背景透明度(0~100)</label>
-            <input type="number" min="0" max="100" step="5" value="100" class="opacity-input" id="bgOpacityPercent">
+            <input type="number" min="0" max="100" step="5" value="100" class="opacity-input" id="opacityPercent">
         </div>
         <button type="button" class="reset-btn" id="resetBgBtn">重置全部设置</button>
     </div>
@@ -631,16 +636,18 @@
         var contextMenu = document.getElementById('contextMenu');
         var contextOverlay = document.getElementById('contextOverlay');
         var addButtonElement = null;
-        // 合并按钮与面板状态分离变量修复
+        // 合并按钮与面板状态
         const comboBtn = document.getElementById('comboMainBtn');
         const bgPanel = document.getElementById('bgSetPanel');
         const bgOverlay = document.getElementById('bgPanelOverlay');
         let isPanelOpen = false;
         let showSetIcon = false;
-        // 背景面板DOM
-        const lightColorInput = document.getElementById('lightBgColor');
-        const darkColorInput = document.getElementById('darkBgColor');
-        const opacityPercentInput = document.getElementById('bgOpacityPercent');
+        // 颜色相关DOM
+        const lightHex = document.getElementById('lightHex');
+        const darkHex = document.getElementById('darkHex');
+        const lightPreview = document.getElementById('lightPreview');
+        const darkPreview = document.getElementById('darkPreview');
+        const opacityPercent = document.getElementById('opacityPercent');
         const uploadLightBgBtn = document.getElementById('uploadLightBgBtn');
         const lightBgFileInput = document.getElementById('lightBgFileInput');
         const uploadDarkBgBtn = document.getElementById('uploadDarkBgBtn');
@@ -649,6 +656,8 @@
         const toggleBookmarksSwitch = document.getElementById('toggleBookmarks');
         const toggleAddBtnSwitch = document.getElementById('toggleAddBtn');
         const toggleLabelHideSwitch = document.getElementById('toggleLabelHide');
+        // 颜色正则校验 #RRGGBB
+        const hexReg = /^#?[0-9a-fA-F]{6}$/;
         // 配置存储
         let bgConfig = {
             lightColor: '#f0f0f5',
@@ -660,25 +669,31 @@
             showAddBtn: true,
             hideLabel: false
         };
-        // 读取本地配置 + 手机取色器强制刷新修复
+        // 十六进制标准化
+        function normHex(str) {
+            let s = str.trim().toLowerCase();
+            if (!s.startsWith('#')) s = '#' + s;
+            if (hexReg.test(s)) return s;
+            return null;
+        }
+        // 读取本地配置
         function loadBgConfig() {
             try {
                 const saved = localStorage.getItem('aira-bg-config');
                 if (saved) bgConfig = JSON.parse(saved);
             } catch (e) {}
-            // 双延时强制重绘，修复安卓iOS颜色赋值不生效
-            setTimeout(() => {
-                lightBgColor.value = bgConfig.lightColor;
-                darkBgColor.value = bgConfig.darkColor;
-            }, 30);
-            setTimeout(() => {
-                lightBgColor.value = bgConfig.lightColor;
-                darkBgColor.value = bgConfig.darkColor;
-            }, 120);
-            opacityPercentInput.value = bgConfig.opacityPercent;
+            // 赋值输入框+预览
+            lightHex.value = bgConfig.lightColor;
+            darkHex.value = bgConfig.darkColor;
+            lightPreview.style.background = bgConfig.lightColor;
+            darkPreview.style.background = bgConfig.darkColor;
+            opacityPercent.value = bgConfig.opacityPercent;
+            // 同步开关UI
             toggleBookmarksSwitch.classList.toggle('active', bgConfig.showBookmarks);
             toggleAddBtnSwitch.classList.toggle('active', bgConfig.showAddBtn);
             toggleLabelHideSwitch.classList.toggle('active', bgConfig.hideLabel);
+            _bookmarksVisible = bgConfig.showBookmarks;
+            _addButtonVisible = bgConfig.showAddBtn;
             _hideLabel = bgConfig.hideLabel;
             applyBookmarksVisible();
             applyAddButtonVisibility();
@@ -699,10 +714,14 @@
             applyBookmarksVisible();
             saveBgConfig();
         }
-        // 添加按钮显隐
+        // 修复添加按钮开关双向同步
         function applyAddButtonVisibility() {
             if (!addButtonElement) return;
-            addButtonElement.classList.toggle('add-btn-hidden', !bgConfig.showAddBtn);
+            if (bgConfig.showAddBtn) {
+                addButtonElement.classList.remove('add-btn-hidden');
+            } else {
+                addButtonElement.classList.add('add-btn-hidden');
+            }
         }
         function toggleAddBtnVisible() {
             bgConfig.showAddBtn = !bgConfig.showAddBtn;
@@ -716,12 +735,11 @@
         }
         function toggleLabelHide() {
             bgConfig.hideLabel = !bgConfig.hideLabel;
-            _hideLabel = bgConfig.hideLabel;
             toggleLabelHideSwitch.classList.toggle('active', bgConfig.hideLabel);
             applyLabelHide();
             saveBgConfig();
         }
-        // 应用背景样式
+        // 全局背景渲染
         function applyBgStyle() {
             const root = document.documentElement;
             const realOpacity = bgConfig.opacityPercent / 100;
@@ -739,7 +757,7 @@
                 root.style.setProperty('--bg', bgConfig.lightColor);
             }
         }
-        // 统一关闭面板函数
+        // 关闭所有面板
         function closeAllPanels() {
             isPanelOpen = false;
             showSetIcon = false;
@@ -747,7 +765,7 @@
             bgOverlay.classList.remove('active');
             comboBtn.classList.remove('mode-set');
         }
-        // 修复按钮点击逻辑
+        // 合并按钮点击逻辑
         function handleComboClick(e) {
             e.stopPropagation();
             if(isPanelOpen){
@@ -764,14 +782,10 @@
                 bgOverlay.classList.add('active');
             }
         }
-        // 遮罩点击关闭
-        bgOverlay.addEventListener('click', function(e){
-            e.stopPropagation();
-            closeAllPanels();
-        });
-        // 面板内部点击不冒泡
-        bgPanel.addEventListener('click', e => e.stopPropagation());
-        // 重置全部背景
+        // 遮罩关闭
+        bgOverlay.addEventListener('click', e=>{e.stopPropagation(); closeAllPanels();});
+        bgPanel.addEventListener('click', e=>e.stopPropagation());
+        // 重置配置
         function resetBg() {
             bgConfig = {
                 lightColor: '#f0f0f5',
@@ -783,20 +797,52 @@
                 showAddBtn: true,
                 hideLabel: false
             };
-            lightBgColor.value = bgConfig.lightColor;
-            darkBgColor.value = bgConfig.darkColor;
-            opacityPercentInput.value = bgConfig.opacityPercent;
-            toggleBookmarksSwitch.classList.add('active');
-            toggleAddBtnSwitch.classList.add('active');
-            toggleLabelHideSwitch.classList.remove('active');
-            _hideLabel = false;
-            applyBookmarksVisible();
-            applyAddButtonVisibility();
-            applyLabelHide();
+            loadBgConfig();
+        }
+        // 浅色颜色输入
+        function updateLightHex() {
+            const val = lightHex.value;
+            const valid = normHex(val);
+            if(valid){
+                bgConfig.lightColor = valid;
+                lightPreview.style.background = valid;
+                saveBgConfig();
+                applyBgStyle();
+            }
+        }
+        lightHex.addEventListener('input', function(){
+            const v = this.value;
+            const valid = normHex(v);
+            if(valid) lightPreview.style.background = valid;
+        });
+        lightHex.addEventListener('blur', updateLightHex);
+        // 深色颜色输入
+        function updateDarkHex() {
+            const val = darkHex.value;
+            const valid = normHex(val);
+            if(valid){
+                bgConfig.darkColor = valid;
+                darkPreview.style.background = valid;
+                saveBgConfig();
+                applyBgStyle();
+            }
+        }
+        darkHex.addEventListener('input', function(){
+            const v = this.value;
+            const valid = normHex(v);
+            if(valid) darkPreview.style.background = valid;
+        });
+        darkHex.addEventListener('blur', updateDarkHex);
+        // 透明度
+        opacityPercent.addEventListener('input', e=>{
+            let val = parseInt(e.target.value);
+            if(isNaN(val)) val = 100;
+            val = Math.max(0, Math.min(100, val));
+            bgConfig.opacityPercent = val;
             saveBgConfig();
             applyBgStyle();
-        }
-        // 上传背景图
+        });
+        // 上传图片
         function handleLightBgUpload(file) {
             if (!file || !file.type.startsWith('image/')) return;
             const reader = new FileReader();
@@ -817,84 +863,36 @@
             };
             reader.readAsDataURL(file);
         }
-        // 颜色修改双重监听，修复移动端点击赋值失效
+        // 绑定事件
         function bindBgEvents() {
             comboBtn.addEventListener('click', handleComboClick);
-            // 开关
             toggleBookmarksSwitch.addEventListener('click', toggleBookmarksVisible);
-            toggleAddBtnSwitch.addEventListener('click', toggleAddBtnSwitch);
+            toggleAddBtnSwitch.addEventListener('click', toggleAddBtnVisible);
             toggleLabelHideSwitch.addEventListener('click', toggleLabelHide);
-            // 浅色背景色
-            function updateLight() {
-                bgConfig.lightColor = lightBgColor.value;
-                saveBgConfig();
-                applyBgStyle();
-            }
-            lightBgColor.addEventListener('input', updateLight);
-            lightBgColor.addEventListener('change', updateLight);
-            lightBgColor.addEventListener('click', ()=>{
-                setTimeout(()=>{lightBgColor.value = bgConfig.lightColor},20);
+            uploadLightBgBtn.addEventListener('click', ()=>lightBgFileInput.click());
+            lightBgFileInput.addEventListener('change', e=>{
+                if(e.target.files[0]) handleLightBgUpload(e.target.files[0]);
             });
-            // 深色背景色
-            function updateDark() {
-                bgConfig.darkColor = darkBgColor.value;
-                saveBgConfig();
-                applyBgStyle();
-            }
-            darkBgColor.addEventListener('input', updateDark);
-            darkBgColor.addEventListener('change', updateDark);
-            darkBgColor.addEventListener('click', ()=>{
-                setTimeout(()=>{darkBgColor.value = bgConfig.darkColor},20);
-            });
-            // 透明度
-            opacityPercentInput.addEventListener('input', e => {
-                let val = parseInt(e.target.value);
-                if (isNaN(val)) val = 100;
-                if (val < 0) val = 0;
-                if (val > 100) val = 100;
-                bgConfig.opacityPercent = val;
-                saveBgConfig();
-                applyBgStyle();
-            });
-            // 上传按钮
-            uploadLightBgBtn.addEventListener('click', () => lightBgFileInput.click());
-            lightBgFileInput.addEventListener('change', e => {
-                if (e.target.files[0]) handleLightBgUpload(e.target.files[0]);
-            });
-            uploadDarkBgBtn.addEventListener('click', () => darkBgFileInput.click());
-            darkBgFileInput.addEventListener('change', e => {
-                if (e.target.files[0]) handleDarkBgUpload(e.target.files[0]);
+            uploadDarkBgBtn.addEventListener('click', ()=>darkBgFileInput.click());
+            darkBgFileInput.addEventListener('change', e=>{
+                if(e.target.files[0]) handleDarkBgUpload(e.target.files[0]);
             });
             resetBtn.addEventListener('click', resetBg);
-            // 系统深色切换监听
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{
-                applyBgStyle();
-            })
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyBgStyle);
         }
-        function loadBookmarkVisibility() {
-            try {
-                const saved = localStorage.getItem('aira-bg-config');
-                if (saved) bgConfig = JSON.parse(saved);
-            } catch (_) {}
-        }
-        function loadAddButtonVisibility() {
-            try {
-                const saved = localStorage.getItem('aira-bg-config');
-                if (saved) bgConfig = JSON.parse(saved);
-            } catch (_) {}
-        }
+        function loadBookmarkVisibility() {}
+        function loadAddButtonVisibility() {}
         function applyStagger(body) {
             if (!body) return;
             const key = body.id;
             if (window._staggerTimers && window._staggerTimers[key]) clearTimeout(window._staggerTimers[key]);
-            const items = body.querySelectorAll('.bookmark-item');
-            if (items.length === 0) return;
             body.classList.remove('expanding');
             void body.offsetWidth;
             body.classList.add('expanding');
+            const items = body.querySelectorAll('.bookmark-item');
             for (let i = 0; i < items.length; i++) items[i].style.animationDelay = `${i * 40}ms`;
             const maxMs = items.length * 40 + 500;
-            if (!window._staggerTimers) window._staggerTimers = {};
+            window._staggerTimers = {};
             window._staggerTimers[key] = setTimeout(() => {
                 body.classList.remove('expanding');
                 for (let j = 0; j < items.length; j++) items[j].style.animationDelay = '';
@@ -905,11 +903,8 @@
             if (!theme) return;
             const root = document.documentElement;
             const effective = theme.effectiveMode || 'light';
-            if (effective === 'dark') {
-                root.classList.add('aira-dark');
-            } else {
-                root.classList.remove('aira-dark');
-            }
+            if (effective === 'dark') root.classList.add('aira-dark');
+            else root.classList.remove('aira-dark');
             applyBgStyle();
         }
         function applyPrivacyMode() {}
@@ -930,55 +925,55 @@
             contextOverlay.classList.remove('active');
         }
         contextOverlay.addEventListener('click', hideContextMenu);
-        contextOverlay.addEventListener('touchstart', hideContextMenu, { passive: true });
-        contextMenu.addEventListener('click', e => {
+        contextOverlay.addEventListener('touchstart', hideContextMenu, {passive:true});
+        contextMenu.addEventListener('click', e=>{
             const target = e.target.closest('.menu-item');
             if (!target) return;
             const action = target.dataset.action;
             const id = contextTargetId;
             if (!id || !window.AiraHome) { hideContextMenu(); return; }
-            switch (action) {
-                case 'edit': AiraHome.editShortcut(id); break;
-                case 'delete': AiraHome.confirmDeleteShortcut(id); break;
-                case 'top': AiraHome.moveShortcutToTop(id); break;
-                case 'bottom': AiraHome.moveShortcut(id); break;
+            switch(action){
+                case 'edit': if(window.AiraHome.editShortcut) AiraHome.editShortcut(id); break;
+                case 'delete': if(window.AiraHome.confirmDeleteShortcut) AiraHome.confirmDeleteShortcut(id); break;
+                case 'top': if(window.AiraHome.moveShortcutToTop) AiraHome.moveShortcutToTop(id); break;
+                case 'bottom': if(window.AiraHome.moveShortcut) AiraHome.moveShortcut(id); break;
             }
             hideContextMenu();
         });
-        contextMenu.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+        contextMenu.addEventListener('touchstart', e=>e.stopPropagation(), {passive:true});
         function setupLongPress(element, onLongPress, onClick) {
             let timer = null, startX, startY, fired = false;
             function start(e) {
                 e.preventDefault();
                 const touch = e.touches ? e.touches[0] : e;
                 startX = touch.clientX; startY = touch.clientY; fired = false;
-                timer = setTimeout(() => { fired = true; onLongPress(e); }, 500);
+                timer = setTimeout(()=>{fired=true; onLongPress(e);},500);
             }
             function move(e) {
                 if (!timer) return;
                 const touch = e.touches ? e.touches[0] : e;
-                const dx = touch.clientX - startX, dy = touch.clientY - startY;
-                if (Math.abs(dx) > 10 || Math.abs(dy) > 10) { clearTimeout(timer); timer = null; }
+                const dx = touch.clientX - startX, dy = touch.clientY;
+                if (Math.abs(dx) > 10 || Math.abs(dy) > 10) clearTimeout(timer), timer=null;
             }
             function end(e) {
                 clearTimeout(timer); timer = null;
-                if (fired) {
+                if(fired){
                     e.preventDefault();
                     _longPressFired = true;
-                    setTimeout(() => _longPressFired = false, 100);
-                } else if (onClick) onClick(e);
+                    setTimeout(()=>_longPressFired=false,100);
+                }else if(onClick) onClick(e);
             }
-            element.addEventListener('touchstart', start, { passive: false });
-            element.addEventListener('touchmove', move, { passive: true });
-            element.addEventListener('touchend', end, { passive: false });
-            element.addEventListener('touchcancel', end, { passive: false });
-            element.addEventListener('mousedown', e => { if (e.button === 0) start(e); });
+            element.addEventListener('touchstart', start, {passive:false});
+            element.addEventListener('touchmove', move, {passive:true});
+            element.addEventListener('touchend', end, {passive:false});
+            element.addEventListener('touchcancel', end, {passive:false});
+            element.addEventListener('mousedown', e=>{if(e.button===0) start(e);});
             element.addEventListener('mousemove', move);
             element.addEventListener('mouseup', end);
-            element.addEventListener('mouseleave', () => { clearTimeout(timer); timer = null; });
-            element.addEventListener('contextmenu', e => e.preventDefault());
+            element.addEventListener('mouseleave', ()=>{clearTimeout(timer); timer=null;});
+            element.addEventListener('contextmenu', e=>e.preventDefault());
         }
-        // 修复添加按钮SVG乱码
+        // 修复添加按钮SVG
         function createAddButton() {
             const div = document.createElement('div');
             div.className = 'bookmark-item';
@@ -986,35 +981,26 @@
             const icon = document.createElement('div');
             icon.className = 'bookmark-icon';
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            svg.setAttribute('width', '24');
-            svg.setAttribute('height', '24');
-            svg.setAttribute('viewBox', '0 0 24 24');
-            svg.setAttribute('fill', 'none');
-            svg.setAttribute('stroke', 'currentColor');
-            svg.setAttribute('stroke-width', '2.8');
-            svg.setAttribute('stroke-linecap', 'round');
-            svg.setAttribute('stroke-linejoin', 'round');
+            svg.setAttribute('width','24');
+            svg.setAttribute('height','24');
+            svg.setAttribute('viewBox','0 0 24 24');
+            svg.setAttribute('fill','none');
+            svg.setAttribute('stroke','currentColor');
+            svg.setAttribute('stroke-width','2.8');
+            svg.setAttribute('stroke-linecap','round');
+            svg.setAttribute('stroke-linejoin','round');
             const lineH = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            lineH.setAttribute('x1', '5');
-            lineH.setAttribute('y1', '12');
-            lineH.setAttribute('x2', '19');
-            lineH.setAttribute('y2', '12');
+            lineH.setAttribute('x1','5'); lineH.setAttribute('y1','12'); lineH.setAttribute('x2','19'); lineH.setAttribute('y2','12');
             const lineV = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            lineV.setAttribute('x1', '12');
-            lineV.setAttribute('y1', '5');
-            lineV.setAttribute('x2', '12');
-            lineV.setAttribute('y2', '19');
-            svg.appendChild(lineH);
-            svg.appendChild(lineV);
+            lineV.setAttribute('x1','12'); lineV.setAttribute('y1','5'); lineV.setAttribute('x2','12'); lineV.setAttribute('y2','19');
+            svg.appendChild(lineH); svg.appendChild(lineV);
             icon.appendChild(svg);
             const name = document.createElement('span');
-            name.className = 'bookmark-name';
-            name.textContent = '添加';
-            div.appendChild(icon);
-            div.appendChild(name);
-            setupLongPress(div, () => {}, e => {
-                if (_longPressFired) { _longPressFired = false; return; }
-                if (window.AiraHome && typeof AiraHome.openShortcutPicker === 'function') AiraHome.openShortcutPicker();
+            name.className = 'bookmark-name'; name.textContent = '添加';
+            div.appendChild(icon); div.appendChild(name);
+            setupLongPress(div, ()=>{}, e=>{
+                if(_longPressFired){_longPressFired=false;return;}
+                if(window.AiraHome && typeof AiraHome.openShortcutPicker === 'function') AiraHome.openShortcutPicker();
             });
             return div;
         }
@@ -1026,42 +1012,40 @@
                 dragItem = item;
                 item.style.opacity = '0.4';
                 e.dataTransfer.effectAllowed = 'move';
-            })
+            });
             container.addEventListener('dragend',e=>{
                 if(!dragItem) return;
                 dragItem.style.opacity = '1';
                 container.querySelectorAll('.bookmark-item').forEach(i=>i.classList.remove('drag-over'));
                 dragItem = null;
-            })
+            });
             container.addEventListener('dragover',e=>{
                 e.preventDefault();
                 const target = e.target.closest('.bookmark-item[data-id]:not([data-id="add-button"])');
                 if(!target || target === dragItem) return;
                 container.querySelectorAll('.bookmark-item').forEach(i=>i.classList.remove('drag-over'));
                 target.classList.add('drag-over');
-            })
+            });
             container.addEventListener('drop',e=>{
                 e.preventDefault();
                 const target = e.target.closest('.bookmark-item[data-id]:not([data-id="add-button"])');
-                if(!target || !dragItem || target === dragItem) return;
+                if(!target || !dragItem) return;
                 const dragId = dragItem.dataset.id;
                 const targetId = target.dataset.id;
                 const dragIdx = currentShortcuts.findIndex(s=>s.id === dragId);
-                const targetIdx = currentShortcuts.findIndex(s=>s.id === targetId);
+                const targetIdx = currentShortcuts.findIndex(s=>s.id);
                 if(dragIdx === -1 || targetIdx === -1) return;
                 const temp = currentShortcuts[dragIdx];
                 currentShortcuts.splice(dragIdx,1);
                 currentShortcuts.splice(targetIdx,0,temp);
-                if(window.AiraHome && AiraHome.saveShortcuts){
-                    AiraHome.saveShortcuts(currentShortcuts);
-                }
+                if(window.AiraHome && AiraHome.saveShortcuts) AiraHome.saveShortcuts(currentShortcuts);
                 renderShortcuts(currentShortcuts);
-            })
+            });
         }
         function renderShortcuts(items) {
             currentShortcuts = items || [];
             container.innerHTML = '';
-            if (items) for (let i = 0; i < items.length; i++) container.appendChild(createShortcutItem(items[i]));
+            if(items) for(let i=0;i<items.length;i++) container.appendChild(createShortcutItem(items[i]));
             addButtonElement = createAddButton();
             container.appendChild(addButtonElement);
             applyBookmarksVisible();
@@ -1076,137 +1060,125 @@
             const icon = document.createElement('div');
             icon.className = 'bookmark-icon';
             const iconUrl = item.icon || null;
-            if (iconUrl) {
+            if(iconUrl){
                 const img = document.createElement('img');
-                img.src = iconUrl; img.alt = item.title || '图标';
-                img.style.width = '36px';
-                img.style.height = '36px';
-                img.style.objectFit = 'contain';
-                img.onerror = () => {
-                    if (img.parentNode) img.parentNode.removeChild(img);
-                    const fallback = document.createElement('span');
-                    fallback.className = 'fallback-text';
-                    fallback.textContent = (item.title || '?').charAt(0);
-                    icon.appendChild(fallback);
+                img.src = iconUrl; img.alt = item.title;
+                img.style.width = '36px'; img.style.height = '36px'; img.style.objectFit = 'contain';
+                img.onerror = ()=>{
+                    if(img.parentNode) img.parentNode.removeChild(img);
+                    const fb = document.createElement('span');
+                    fb.className = 'fallback-text'; fb.textContent = item.title[0] || '?';
+                    icon.appendChild(fb);
                 };
                 icon.appendChild(img);
-            } else {
-                const fallback = document.createElement('span');
-                fallback.className = 'fallback-text';
-                fallback.textContent = (item.title || '?').charAt(0);
-                icon.appendChild(fallback);
+            }else{
+                const fb = document.createElement('span');
+                fb.className = 'fallback-text'; fb.textContent = item.title[0] || '?';
+                icon.appendChild(fb);
             }
             const name = document.createElement('span');
-            name.className = 'bookmark-name';
-            name.textContent = item.title || item.url || '未命名';
-            div.appendChild(icon);
-            div.appendChild(name);
-            setupLongPress(div, e => {
-                const touch = e.touches ? e.touches[0] : e;
-                let x = touch.clientX - 60, y = touch.clientY - 20;
-                if (x < 10) x = 10;
-                if (x + 150 > window.innerWidth) x = window.innerWidth - 150;
-                if (y < 20) y = 20;
-                if (y + 200 > window.innerHeight) y = window.innerHeight - 200;
-                showContextMenu(x, y, item.id);
-            }, e => {
-                if (_longPressFired) { _longPressFired = false; return; }
-                if (window.AiraHome && item.id) AiraHome.openShortcut(item.id);
+            name.className = 'bookmark-name'; name.textContent = item.title || '';
+            div.appendChild(icon); div.appendChild(name);
+            setupLongPress(div, e=>{
+                const t = e.touches ? e.touches[0] : e;
+                let x = t.clientX - 60, y = t.clientY - 20;
+                if(x < 10) x = 10;
+                if(x + 150 > window.innerWidth) x = window.innerWidth - 150;
+                if(y < 20) y = 20;
+                if(y + 200 > window.innerHeight) y = window.innerHeight - 200;
+                showContext(x,y,item.id);
+            }, e=>{
+                if(_longPressFired){_longPressFired=false;return;}
+                if(window.AiraHome && AiraHome.openShortcut) AiraHome.openShortcut(item.id);
             });
             return div;
         }
         function doSearch() {
             const input = document.getElementById('searchInput');
-            const query = input.value.trim();
-            if (!query) return;
-            if (window.AiraHome) AiraHome.search(query);
+            const q = input.value.trim();
+            if(!q) return;
+            if(window.AiraHome && AiraHome.search) AiraHome.search(q);
         }
         function setupGlobalBlankArea() {
             let timer = null, startX, startY, fired = false, allowShortTap = false;
             function isInteractive(target) {
-                if (!target) return false;
+                if(!target) return false;
                 return target.closest('.bookmark-item') || target.closest('.btn-icon') ||
-                    target.closest('#comboMainBtn') || target.closest('#searchInput') ||
-                    target.closest('.context-menu') || target.closest('.search-bar') ||
-                    target.closest('.bg-set-panel');
+                target.closest('#comboMainBtn') || target.closest('#searchInput') ||
+                target.closest('.context-menu') || target.closest('.search-bar') ||
+                target.closest('.bg-set-panel');
             }
-            function shouldRespond(x, y) {
-                const target = document.elementFromPoint(x, y);
-                return !isInteractive(target);
+            function shouldRespond(x,y) {
+                const t = document.elementFromPoint(x,y);
+                return !isInteractive(t);
             }
             function touchStart(e) {
-                const touch = e.touches[0];
-                allowShortTap = shouldRespond(touch.clientX, touch.clientY);
-                if (!allowShortTap) return;
-                startX = touch.clientX; startY = touch.clientY; fired = false;
-                timer = setTimeout(() => { fired = true; toggleBookmarksVisible(); }, 500);
+                const t = e.touches[0];
+                allowShortTap = shouldRespond(t.clientX, t.clientY);
+                if(!allowShortTap) return;
+                startX = t.clientX; startY = t.clientY; fired = false;
+                timer = setTimeout(()=>{fired=true; toggleBookmarksVisible();},500);
             }
             function touchMove(e) {
-                if (!timer) return;
-                const touch = e.touches[0];
-                const dx = touch.clientX - startX, dy = touch.clientY - startY;
-                if (Math.abs(dx) > 10 || Math.abs(dy) > 10) { clearTimeout(timer); timer = null; allowShortTap = false; }
+                if(!timer) return;
+                const t = e.touches[0];
+                const dx = t.clientX - startX, dy = t.clientY;
+                if(Math.abs(dx)>10 || Math.abs(dy)>10){clearTimeout(timer);timer=null;allowShortTap=false;}
             }
             function touchEnd() {
-                if (timer) {
-                    clearTimeout(timer);
-                    if (!fired && allowShortTap) toggleAddBtnVisible();
-                }
+                if(timer){clearTimeout(timer);timer=null;if(!fired && allowShortTap) toggleAddBtnVisible();}
                 fired = false; allowShortTap = false;
             }
-            document.addEventListener('touchstart', touchStart, { passive: true });
-            document.addEventListener('touchmove', touchMove, { passive: true });
-            document.addEventListener('touchend', touchEnd, { passive: true });
-            document.addEventListener('touchcancel', touchEnd, { passive: true });
+            document.addEventListener('touchstart', touchStart, {passive:true});
+            document.addEventListener('touchmove', touchMove, {passive:true});
+            document.addEventListener('touchend', touchEnd, {passive:true});
+            document.addEventListener('touchcancel', touchEnd, {passive:true});
             function mouseDown(e) {
-                if (e.button !== 0) return;
+                if(e.button !==0) return;
                 allowShortTap = shouldRespond(e.clientX, e.clientY);
-                if (!allowShortTap) return;
+                if(!allowShortTap) return;
                 startX = e.clientX; startY = e.clientY; fired = false;
-                timer = setTimeout(() => { fired = true; toggleBookmarksVisible(); }, 500);
+                timer = setTimeout(()=>{fired=true; toggleBookmarksVisible();},500);
             }
             function mouseMove(e) {
-                if (!timer) return;
+                if(!timer) return;
                 const dx = e.clientX - startX, dy = e.clientY;
-                if (Math.abs(dx) > 10 || Math.abs(dy) > 10) { clearTimeout(timer); timer = null; allowShortTap = false; }
+                if(Math.abs(dx)>10 || Math.abs(dy)){clearTimeout(timer);timer=null;allowShortTap=false;}
             }
             function mouseUp() {
-                if (timer) {
-                    clearTimeout(timer);
-                    if (!fired && allowShortTap) toggleAddBtnVisible();
-                }
+                if(timer){clearTimeout(timer);timer=null;if(!fired && allowShortTap) toggleAddBtnVisible();}
                 fired = false; allowShortTap = false;
             }
             document.addEventListener('mousedown', mouseDown);
             document.addEventListener('mousemove', mouseMove);
             document.addEventListener('mouseup', mouseUp);
-            document.addEventListener('mouseleave', () => { if (timer) { clearTimeout(timer); timer = null; } fired = false; });
+            document.addEventListener('mouseleave', ()=>{if(timer){clearTimeout(timer);timer=null;}fired=false;});
         }
         function init() {
-            loadBgConfig();
             bindBgEvents();
+            loadBgConfig();
             initDragSort();
             const searchInput = document.getElementById('searchInput');
-            if (searchInput) searchInput.value = '';
+            if(searchInput) searchInput.value = '';
             loadBookmarkVisibility();
             loadAddButtonVisibility();
             setupGlobalBlankArea();
-            if (!window.AiraHome) { renderShortcuts([]); return; }
-            AiraHome.getShortcuts().then(items => renderShortcuts(items)).catch(() => renderShortcuts([]));
-            AiraHome.getTheme().then(applyTheme).catch(() => {});
-            if (typeof AiraHome.getPrivacyMode === 'function') AiraHome.getPrivacyMode().then(applyPrivacyMode).catch(() => {});
+            if(!window.AiraHome){renderShortcuts([]);return;}
+            AiraHome.getShortcuts().then(items=>renderShortcuts(items)).catch(()=>renderShortcuts([]));
+            AiraHome.getTheme().then(applyTheme).catch(()=>{});
+            if(typeof AiraHome.getPrivacyMode === 'function') AiraHome.getPrivacyMode().then(applyPrivacyMode).catch(()=>{});
         }
-        window.addEventListener('aira-home-shortcuts-changed', e => renderShortcuts(e.detail || []));
-        window.addEventListener('aira-home-theme-changed', e => applyTheme(e.detail || {}));
-        window.addEventListener('aira-home-privacy-mode-changed', e => applyPrivacyMode(e.detail || {}));
+        window.addEventListener('aira-home-shortcuts-changed', e=>renderShortcuts(e.detail || []));
+        window.addEventListener('aira-home-theme-changed', e=>applyTheme(e.detail || {}));
+        window.addEventListener('aira-home-privacy-mode-changed', e=>applyPrivacyMode(e.detail || {}));
         document.getElementById('searchBtn').addEventListener('click', doSearch);
-        document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
-        document.getElementById('scanBtn').addEventListener('click', () => { if (window.AiraHome && AiraHome.scanQr) AiraHome.scanQr(); });
+        document.getElementById('searchInput').addEventListener('keydown', e=>{if(e.key === 'Enter') doSearch();});
+        document.getElementById('scanBtn').addEventListener('click', ()=>{if(window.AiraHome && AiraHome.scanQr) AiraHome.scanQr();});
         document.getElementById('comboMainBtn').addEventListener('click', handleComboClick);
-        document.addEventListener('click', e => {
-            if (contextMenu.classList.contains('active') && !contextMenu.contains(e.target)) hideContextMenu();
+        document.addEventListener('click', e=>{
+            if(contextMenu.classList.contains('active') && !contextMenu.contains(e.target)) hideContextMenu();
         });
-        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+        if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
         else init();
     </script>
 </body>
