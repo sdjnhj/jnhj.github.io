@@ -64,20 +64,39 @@ body{-webkit-user-select:none;user-select:none}
   --mono:-apple-system,BlinkMacSystemFont,'SF Pro Rounded','SF Mono','Helvetica Neue',Arial,sans-serif;
 }
 
-/* 页面级背景默认透明（让 App 原生壁纸透出） */
-html,body{background:transparent;color:var(--text);font-family:var(--serif);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+/* 页面级背景：深色渐变（不透明，不再透 App 壁纸） */
+html,body{
+  background:#070b12;
+  color:var(--text);
+  font-family:var(--serif);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
 body{min-height:100vh;min-height:100dvh;overflow-x:hidden}
-/* 非 App（普通浏览器）兜底：深色背景，避免透明导致白底 */
-html:not(.fm-native),
-html:not(.fm-native) body{ background:#080808; }
-/* App 环境：强制透明 */
-html.fm-native,
-html.fm-native body{ background:transparent; }
+html, body,
+html.fm-native, html.fm-native body,
+html:not(.fm-native), html:not(.fm-native) body{
+  background:#070b12 !important;
+}
 
-/* scanline（仅非 App 环境显示，App 下隐藏避免压在壁纸上） */
-body::before{content:'';position:fixed;top:0;right:0;bottom:0;left:0;z-index:0;pointer-events:none;
-  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 4px)}
-html.fm-native body::before{ display:none; }
+/* 氛围渐变 + 轻微纹理（固定层，不透明） */
+body::before{
+  content:'';
+  position:fixed;top:0;right:0;bottom:0;left:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 90% 55% at 8% -8%, rgba(125,244,255,.16) 0%, transparent 58%),
+    radial-gradient(ellipse 70% 48% at 98% 12%, rgba(196,92,255,.14) 0%, transparent 52%),
+    radial-gradient(ellipse 80% 50% at 50% 108%, rgba(56,189,248,.10) 0%, transparent 55%),
+    linear-gradient(165deg, #070b12 0%, #0c1420 42%, #080e18 100%);
+}
+body::after{
+  content:'';
+  position:fixed;top:0;right:0;bottom:0;left:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,.035), transparent 36%),
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,.03) 3px, rgba(0,0,0,.03) 4px);
+  opacity:.9;
+}
 
 /* ── NAV ── */
 #nav{
@@ -89,11 +108,11 @@ html.fm-native body::before{ display:none; }
   border-bottom:1px solid rgba(255,255,255,.06);
   display:flex;align-items:center;
 }
-/* App 环境：导航栏半透明毛玻璃，让壁纸透出 */
+/* App 环境：导航栏与页面背景协调，略透明毛玻璃 */
 html.fm-native #nav{
-  background:rgba(10,10,12,.42);
-  backdrop-filter:blur(18px) saturate(1.1);
-  border-bottom:1px solid rgba(255,255,255,.1);
+  background:rgba(7,11,18,.88);
+  backdrop-filter:blur(18px) saturate(1.15);
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
 .ntabs{
   display:flex;align-items:center;flex:1;
@@ -176,15 +195,13 @@ html.fm-native #nav{
 .hero-slide.active .hero-slide-bg{transform:scale(1.04)}
 .hero-slide-grad{
   position:absolute;top:0;right:0;bottom:0;left:0;
+  /* 仅左侧压暗保证文字可读，去掉底部压暗 */
   background:
-    linear-gradient(90deg,rgba(8,8,8,.92) 0%,rgba(8,8,8,.6) 36%,rgba(8,8,8,.1) 64%,transparent 100%),
-    linear-gradient(0deg,#080808 0%,rgba(8,8,8,.85) 18%,rgba(8,8,8,.35) 42%,transparent 70%);
+    linear-gradient(90deg,rgba(8,8,8,.88) 0%,rgba(8,8,8,.55) 36%,rgba(8,8,8,.08) 64%,transparent 100%);
 }
-/* App 透明环境：底部渐隐到透明（融入壁纸/页面），而非纯黑 */
 html.fm-native .hero-slide-grad{
   background:
-    linear-gradient(90deg,rgba(8,8,8,.85) 0%,rgba(8,8,8,.5) 36%,rgba(8,8,8,.08) 64%,transparent 100%),
-    linear-gradient(0deg,rgba(8,8,8,.92) 0%,rgba(8,8,8,.55) 22%,rgba(8,8,8,.15) 48%,transparent 72%);
+    linear-gradient(90deg,rgba(8,8,8,.82) 0%,rgba(8,8,8,.48) 36%,rgba(8,8,8,.06) 64%,transparent 100%);
 }
 .hero-slide-content{
   position:absolute;
@@ -325,6 +342,17 @@ html.fm-native .hero-slide-grad{
   width:var(--card-w,100px);
   min-width:0;
 }
+
+
+/* 继续观看 */
+#s-continue .card-resume-tag{
+  position:absolute;bottom:6px;left:6px;z-index:2;
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  background:rgba(125,244,255,.9);color:#031018;
+  padding:2px 6px;border-radius:4px;
+  letter-spacing:.04em;
+}
+#s-continue .card.cw-removing{opacity:.35;transform:scale(.92);transition:opacity .2s,transform .2s}
 
 /* ── CARD ── */
 .card{
@@ -741,7 +769,7 @@ html.search-active #s-search{
 .det-hero-img{
   position:absolute;top:0;left:0;
   width:100%;height:100%;object-fit:cover;object-position:center top;
-  filter:saturate(1.05) brightness(1.32);
+  filter:saturate(1.02) brightness(1.02);
   opacity:0;transition:opacity 1.2s ease;
 }
 .det-hero-img.active{opacity:1}
@@ -775,12 +803,67 @@ html.search-active #s-search{
   transition:opacity .2s linear,transform .2s linear;
 }
 #detNav.scrolled #detNavTitle{opacity:1;transform:translateY(0)}
-/* 手机竖屏：仅底部渐变压暗以便文字可读，不再对左侧整体压暗 */
+/* 手机竖屏：底部更强压暗 + 磨砂，保证正文/主演可读 */
 .det-hero::after{
   content:'';position:absolute;top:0;right:0;bottom:0;left:0;
   background:
-    linear-gradient(180deg,rgba(6,17,27,0) 0%,rgba(6,17,27,0) 50%,rgba(6,17,27,.45) 70%,rgba(6,17,27,.92) 100%);
+    linear-gradient(180deg,
+      rgba(6,17,27,0) 0%,
+      rgba(6,17,27,0) 28%,
+      rgba(6,17,27,.28) 48%,
+      rgba(6,17,27,.62) 68%,
+      rgba(6,17,27,.88) 86%,
+      rgba(6,17,27,.96) 100%);
 }
+/* iOS 式底部磨砂玻璃：固定在详情页下半屏，内容层 z-index 更高 */
+#det.on::before{
+  content:'';
+  position:fixed;
+  left:0;right:0;bottom:0;
+  height:min(68vh, 640px);
+  z-index:1;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,
+      rgba(6,17,27,0) 0%,
+      rgba(6,17,27,.22) 22%,
+      rgba(6,17,27,.48) 48%,
+      rgba(6,17,27,.72) 72%,
+      rgba(6,17,27,.86) 100%);
+  -webkit-backdrop-filter:blur(28px) saturate(1.4);
+  backdrop-filter:blur(28px) saturate(1.4);
+  -webkit-mask-image:linear-gradient(180deg, transparent 0%, #000 30%, #000 100%);
+  mask-image:linear-gradient(180deg, transparent 0%, #000 30%, #000 100%);
+}
+/* 无 backdrop-filter 的老 WebView：靠更深渐变兜底（已有 det-hero::after） */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  #det.on::before{
+    background:
+      linear-gradient(180deg,
+        rgba(6,17,27,0) 0%,
+        rgba(6,17,27,.35) 25%,
+        rgba(6,17,27,.72) 55%,
+        rgba(6,17,27,.92) 100%);
+  }
+}
+@media(min-width:1100px) and (pointer:fine){
+  #det.on::before{
+    /* 桌面双列：只给左侧信息区附近加深，避免整屏磨砂糊死右侧海报 */
+    left:0;right:auto;
+    width:min(720px, 52vw);
+    height:100%;
+    background:
+      linear-gradient(90deg,
+        rgba(6,17,27,.55) 0%,
+        rgba(6,17,27,.28) 55%,
+        rgba(6,17,27,0) 100%);
+    -webkit-backdrop-filter:blur(18px) saturate(1.25);
+    backdrop-filter:blur(18px) saturate(1.25);
+    -webkit-mask-image:linear-gradient(90deg, #000 0%, #000 60%, transparent 100%);
+    mask-image:linear-gradient(90deg, #000 0%, #000 60%, transparent 100%);
+  }
+}
+
 /* 宽屏桌面（≥1100）：左侧深色文字区，右侧图片大量透出 */
 @media(min-width:1100px){
   .det-hero::after{
@@ -800,6 +883,7 @@ html.search-active #s-search{
   width:100%;
   padding:calc(var(--safe-t) + 20px) 14px 48px;
   box-sizing:border-box;
+  /* 内容压在磨砂层之上 */
 }
 
 /* 平板 / 中等宽度（700-1100）：单列铺满全宽，信息不被截断 */
@@ -853,17 +937,17 @@ html.search-active #s-search{
   display:flex;gap:16px;align-items:flex-end;
   margin-bottom:18px;
 }
-/* 手机竖屏：顶部留出背景图空间 + 返回按钮空间 */
+/* 手机竖屏：顶部留出背景图空间 + 返回按钮空间（整体下移 20px 少挡海报） */
 @media(max-width:699px){
-  .det-poster-row{margin-top:180px;margin-top:clamp(142px,45vw,262px)}
+  .det-poster-row{margin-top:200px;margin-top:clamp(162px,calc(45vw + 20px),282px)}
 }
 /* 平板单列（700-1100）：留中等顶部空间露出背景图 */
 @media(min-width:700px) and (max-width:1099px){
-  .det-poster-row{margin-top:0;padding-top:240px;padding-top:clamp(180px,34vh,360px)}
+  .det-poster-row{margin-top:0;padding-top:260px;padding-top:clamp(200px,calc(34vh + 20px),380px)}
 }
 /* 宽屏桌面双列：不需要顶部留白，从 padding 开始 */
 @media(min-width:1100px){
-  .det-poster-row{margin-top:0;padding-top:40px;padding-top:max(20px, 8vh)}
+  .det-poster-row{margin-top:0;padding-top:60px;padding-top:max(40px, calc(8vh + 20px))}
 }
 
 /* ── 触屏平板横屏（≥1100 但是触摸设备）：撤销桌面双列，回到全宽单列 ──
@@ -882,7 +966,7 @@ html.search-active #s-search{
   }
   .det-inner > *{ grid-column:auto; min-width:0; }
   /* 顶部留白露出剧照，而不是把它挤到右半屏 */
-  .det-poster-row{ margin-top:0; padding-top:240px; padding-top:clamp(180px,34vh,360px); }
+  .det-poster-row{ margin-top:0; padding-top:260px; padding-top:clamp(200px,calc(34vh + 20px),380px); }
   /* 渐变改为纯纵向（顶部透出剧照、底部压暗文字），取消左重右透的横向渐变 */
   .det-hero::after{
     background:
@@ -988,6 +1072,19 @@ html.search-active #s-search{
   animation:btn-flow 3s ease infinite;
 }
 #detPlayBtn svg,#detPlayBtn span{position:relative;z-index:1}
+#detPlayBtn svg{
+  width:12px;height:12px;flex-shrink:0;
+  color:rgba(3,13,16,.42);
+  fill:currentColor;
+  transition:color .28s ease, filter .28s ease, opacity .28s ease;
+  opacity:.75;
+}
+#detPlayBtn.ready svg{
+  color:#0b3d18;
+  fill:#1bd46a;
+  opacity:1;
+  filter:drop-shadow(0 0 5px rgba(61,220,132,.95)) drop-shadow(0 0 10px rgba(61,220,132,.55));
+}
 #detPlayBtn:hover{
   transform:translateY(-2px) scale(1.03);
   box-shadow:0 0 34px rgba(125,244,255,.55),0 0 14px rgba(196,92,255,.45);
@@ -1009,7 +1106,7 @@ html.search-active #s-search{
 /* overview */
 .det-overview{
   font-size:14px;line-height:1.75;color:rgba(240,237,232,.75);
-  margin-bottom:0;
+  margin-bottom:4px;
 }
 .det-overview.clamped{
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
@@ -1019,7 +1116,7 @@ html.search-active #s-search{
   display:none;
   background:none;border:none;cursor:pointer;padding:0;
   font-family:var(--mono);font-size:12px;color:var(--accent);
-  letter-spacing:.05em;margin-top:6px;margin-bottom:16px;
+  letter-spacing:.05em;margin-top:4px;margin-bottom:6px;
 }
 .det-overview-toggle.show{display:inline-flex;align-items:center;gap:3px}
 .det-overview-toggle svg{width:11px;height:11px;transition:transform .2s}
@@ -1029,7 +1126,7 @@ html.search-active #s-search{
 .det-sec-label{
   font-family:var(--mono);font-size:11px;letter-spacing:.22em;
   text-transform:uppercase;color:#fff;
-  margin:22px 0 10px;
+  margin:10px 0 8px;
   display:flex;align-items:center;gap:10px;
 }
 .det-sec-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.07)}
@@ -1048,7 +1145,7 @@ html.search-active #s-search{
   scrollbar-width:none;
   -webkit-overflow-scrolling:touch;
   width:100%;
-  padding:6px 4px 2px;   /* 给 box-shadow 留出空间 */
+  padding:4px 2px 2px;
   box-sizing:border-box;
 }
 .det-cast-wrap::-webkit-scrollbar{display:none}
@@ -1070,11 +1167,12 @@ html.search-active #s-search{
 .det-cast-card:active{transform:scale(.94)}
 @media (hover:hover) and (pointer:fine){
   .det-cast-card:hover{transform:scale(1.07)}
-  .det-cast-card:hover .det-cast-img{border-color:rgba(255,255,255,.4)}
+  .det-cast-card:hover .det-cast-img{filter:brightness(1.08)}
 }
 .det-cast-card.active .det-cast-img{
-  border-color:var(--accent);
-  box-shadow:0 0 0 3px rgba(125,244,255,.5);
+  border:none;
+  box-shadow:0 0 0 2px rgba(125,244,255,.55);
+  filter:brightness(1.06);
 }
 
 /* 圆形头像 */
@@ -1082,7 +1180,9 @@ html.search-active #s-search{
   width:72px;height:72px;border-radius:50%;
   object-fit:cover;object-position:center top;
   background:var(--surface2);
-  border:2px solid rgba(255,255,255,.14);
+  border:none;
+  outline:none;
+  box-shadow:none;
   display:block;flex-shrink:0;
   pointer-events:none;
   -webkit-touch-callout:none;
@@ -1121,14 +1221,16 @@ html.search-active #s-search{
   margin:16px 0 10px;
   padding:12px 14px;
   background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:10px;
+  border:none;
+  border-radius:12px;
 }
 .det-person-avatar{
   width:54px;height:54px;border-radius:50%;
   object-fit:cover;object-position:center top;
   background:var(--surface2);
-  border:2px solid rgba(255,255,255,.15);
+  border:none;
+  outline:none;
+  box-shadow:none;
   flex-shrink:0;display:block;
 }
 .det-person-meta{flex:1;min-width:0}
@@ -1163,8 +1265,69 @@ html.search-active #s-search{
   padding:20px 0 8px;
 }
 .det-cast-card:focus-visible .det-cast-img{
-  border-color:var(--accent);
-  box-shadow:0 0 0 3px rgba(125,244,255,.4);
+  border:none;
+  box-shadow:0 0 0 2px rgba(125,244,255,.5);
+}
+
+
+/* ── 详情页固定骨架：占位高度固定，加载后不乱跳 ── */
+.det-pills{min-height:30px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.det-overview{min-height:72px}
+.det-logo-wrap{min-height:48px}
+#detCast{min-height:148px}
+#detRecs{min-height:200px}
+.det-sk-block{pointer-events:none;user-select:none}
+.det-sk-cast{
+  display:flex;gap:12px;overflow:hidden;padding:4px 2px 8px;
+}
+.det-sk-cast-item{
+  flex:0 0 72px;width:72px;
+  display:flex;flex-direction:column;align-items:center;
+}
+.det-sk-avatar{
+  width:72px;height:72px;border-radius:50%;
+  background:linear-gradient(90deg,rgba(255,255,255,.06) 25%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.06) 75%);
+  background-size:200% 100%;
+  animation:sk 1.5s infinite linear;
+}
+.det-sk-line{
+  border-radius:4px;margin-top:8px;
+  background:linear-gradient(90deg,rgba(255,255,255,.06) 25%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.06) 75%);
+  background-size:200% 100%;
+  animation:sk 1.5s infinite linear;
+}
+.det-sk-line.n{width:56px;height:10px}
+.det-sk-line.c{width:40px;height:8px;margin-top:5px;opacity:.7}
+.det-sk-recs{
+  display:flex;gap:var(--gut);overflow:hidden;padding-bottom:8px;
+}
+.det-sk-card{
+  flex:0 0 var(--card-w,100px);width:var(--card-w,100px);
+  aspect-ratio:2/3;border-radius:12px;
+  background:linear-gradient(90deg,rgba(255,255,255,.06) 25%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.06) 75%);
+  background-size:200% 100%;
+  animation:sk 1.5s infinite linear;
+}
+.det-sk-label{
+  height:12px;width:48px;border-radius:4px;margin:18px 0 10px;
+  background:linear-gradient(90deg,rgba(255,255,255,.06) 25%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.06) 75%);
+  background-size:200% 100%;
+  animation:sk 1.5s infinite linear;
+}
+.det-pill.sk{
+  background:linear-gradient(90deg,rgba(255,255,255,.06) 25%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.06) 75%) !important;
+  background-size:200% 100% !important;
+  animation:sk 1.5s infinite linear;
+  border:none !important;color:transparent !important;
+  min-width:48px;
+}
+.det-overview.sk{
+  background:linear-gradient(90deg,rgba(255,255,255,.06) 25%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.06) 75%);
+  background-size:200% 100%;
+  animation:sk 1.5s infinite linear;
+  color:transparent !important;
+  border-radius:8px;
+  min-height:72px;
 }
 
 /* similar / recs */
@@ -1610,8 +1773,8 @@ body.tv-mode .sechd.tv-focus{
   box-shadow: none !important;
 }
 body.tv-mode .det-cast-card.tv-focus .det-cast-img{
-  border-color: var(--accent);
-  box-shadow: none !important;
+  border:none;
+  box-shadow:0 0 0 2px rgba(125,244,255,.55);
 }
 body.tv-mode .pan-item.tv-focus,
 body.tv-mode .pan-chip.tv-focus{
@@ -1755,6 +1918,10 @@ body.tv-mode .det-poster-row{
   <div id="heroDots"></div>
 </div>
 <!-- Sections -->
+<section class="sec" id="s-continue" style="display:none">
+<div class="sechd"><span class="sectitle">继续观看</span><div class="secline"></div><span class="seccnt" id="cnt-continue"></span></div>
+<div class="grid" id="g-continue"></div>
+</section>
 <section class="sec" id="s-new">
 <div class="sechd clickable" onclick="openCat('new')"><span class="sectitle">最新上线</span><div class="secline"></div><span class="seccnt" id="cnt-new"></span><span class="sec-more">更多<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></div>
 <div class="grid" id="g-new"></div>
@@ -2069,7 +2236,7 @@ function buildHeroSlide(item, idx){
       ].filter(Boolean).join('')}</div>
       <button class="hero-play-btn" onclick="event.stopPropagation();heroPlayItem(heroItems[${idx}])">
         <svg fill="currentColor" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
-        搜索播放
+        播放
       </button>
     </div>
   </div>`;
@@ -2319,6 +2486,7 @@ function relDate(offsetDays){
 }
 
 async function loadAll(){
+  try{ renderContinueWatch(); }catch(e){}
   // 重新进页面时清除滚动记录，让所有轨道回到起点
   Object.keys(_gridScrolled).forEach(k=>delete _gridScrolled[k]);
   updateHomeRails();
@@ -3460,6 +3628,142 @@ function _startDetBackdrop(backdrops, token){
   }, 5000);
 }
 
+
+// ── 本站继续观看（localStorage，仅记录本站点击播放）──
+const CW_KEY = 'eclipse_continue_v1';
+const CW_MAX = 24;
+function loadContinueWatch(){
+  try{ return JSON.parse(localStorage.getItem(CW_KEY)||'[]') || []; }
+  catch(e){ return []; }
+}
+function saveContinueWatch(list){
+  try{ localStorage.setItem(CW_KEY, JSON.stringify((list||[]).slice(0, CW_MAX))); }catch(e){}
+}
+function getContinueWatch(id){
+  const sid = String(id||'');
+  return loadContinueWatch().find(x=>String(x.id)===sid) || null;
+}
+function removeContinueWatch(id){
+  const sid = String(id||'');
+  saveContinueWatch(loadContinueWatch().filter(x=>String(x.id)!==sid));
+  renderContinueWatch();
+}
+function upsertContinueWatch(rec){
+  if(!rec || !rec.id) return;
+  const list = loadContinueWatch().filter(x=>String(x.id)!==String(rec.id));
+  list.unshift(Object.assign({}, rec, { playedAt: Date.now() }));
+  saveContinueWatch(list);
+  renderContinueWatch();
+}
+function recordContinueFromDet(panItem){
+  if(!detData || !panItem) return;
+  const item = detData;
+  const isTV = !!item.name;
+  upsertContinueWatch({
+    id: item.id,
+    media_type: isTV ? 'tv' : 'movie',
+    title: item.title || item.name || '',
+    name: item.name || '',
+    poster_path: item.poster_path || '',
+    backdrop_path: item.backdrop_path || '',
+    vote_average: item.vote_average || 0,
+    release_date: item.release_date || '',
+    first_air_date: item.first_air_date || '',
+    panType: panNormType(panItem.diskType || panItem.type || ''),
+    url: panItem.normalizedUrl || panItem.url || '',
+    password: panItem.password || '',
+    panTitle: panItem.title || ''
+  });
+}
+function cwCardHtml(rec){
+  const isTV = rec.media_type === 'tv' || !!rec.name;
+  const title = rec.title || rec.name || '';
+  const year = (rec.release_date||rec.first_air_date||'').slice(0,4);
+  const rating = rec.vote_average ? Number(rec.vote_average).toFixed(1) : '';
+  const poster = rec.poster_path;
+  const imgSrc = posterSrc(poster, false);
+  const bg = `hsla(${hue(rec.id)},18%,13%,0.5)`;
+  const imgTag = imgSrc
+    ? `<img src="${imgSrc}" alt="" loading="lazy" decoding="async" data-loading onload="this.classList.add('loaded');this.removeAttribute('data-loading')" onerror="this.remove()">`
+    : '';
+  // 把条目塞进 ITEMS 以便 openDet
+  if(!ITEMS[rec.id]){
+    ITEMS[rec.id] = {
+      id: rec.id,
+      title: isTV ? undefined : title,
+      name: isTV ? title : undefined,
+      poster_path: rec.poster_path,
+      backdrop_path: rec.backdrop_path,
+      vote_average: rec.vote_average,
+      release_date: rec.release_date,
+      first_air_date: rec.first_air_date
+    };
+  }
+  return `<div class="card" tabindex="0" role="button" data-cw-id="${rec.id}"
+    data-id="${rec.id}" data-tv="${isTV?1:0}"
+    onclick="openDet(ITEMS[${rec.id}])"
+    onkeydown="if(event.key==='Enter')openDet(ITEMS[${rec.id}])">
+    <div class="card-img" style="background:${bg}">
+      ${imgTag}
+      <div class="card-overlay"></div>
+      ${rating?`<div class="card-rating">★${rating}</div>`:''}
+      <div class="card-resume-tag">续播</div>
+    </div>
+    <div class="card-body">
+      <div class="card-name">${esc(title)}</div>
+      <div class="card-sub">${year}${isTV?' · 剧集':' · 电影'} · 长按删除</div>
+    </div>
+  </div>`;
+}
+function renderContinueWatch(){
+  const sec = document.getElementById('s-continue');
+  const grid = document.getElementById('g-continue');
+  const cnt = document.getElementById('cnt-continue');
+  if(!sec || !grid) return;
+  const list = loadContinueWatch().filter(x=>x && x.id);
+  if(!list.length){
+    sec.style.display = 'none';
+    grid.innerHTML = '';
+    if(cnt) cnt.textContent = '';
+    return;
+  }
+  sec.style.display = '';
+  grid.innerHTML = list.map(cwCardHtml).join('');
+  if(cnt) cnt.textContent = String(list.length);
+  // 长按删除
+  grid.querySelectorAll('.card[data-cw-id]').forEach(card=>{
+    let timer=null, fired=false, sx=0, sy=0;
+    const clear=()=>{ if(timer){ clearTimeout(timer); timer=null; } };
+    card.addEventListener('pointerdown', e=>{
+      if(e.button && e.button!==0) return;
+      fired=false; sx=e.clientX; sy=e.clientY;
+      try{ card.setPointerCapture && card.setPointerCapture(e.pointerId); }catch(_){}
+      timer=setTimeout(()=>{
+        fired=true;
+        if(navigator.vibrate) try{ navigator.vibrate(25); }catch(_){}
+        const id = card.getAttribute('data-cw-id');
+        card.classList.add('cw-removing');
+        setTimeout(()=>removeContinueWatch(id), 180);
+      }, 480);
+    });
+    card.addEventListener('pointerup', e=>{
+      clear();
+      if(fired){ e.preventDefault(); e.stopPropagation(); }
+    });
+    card.addEventListener('pointercancel', clear);
+    card.addEventListener('pointermove', e=>{
+      if(Math.abs(e.clientX-sx)>12 || Math.abs(e.clientY-sy)>12) clear();
+    });
+    card.addEventListener('contextmenu', e=>{ e.preventDefault(); });
+    // 阻止长按后的 click 进详情
+    card.addEventListener('click', e=>{
+      if(fired){ e.preventDefault(); e.stopPropagation(); fired=false; }
+    }, true);
+  });
+  try{ if(typeof updateHomeRails==='function') updateHomeRails(); }catch(e){}
+}
+
+
 // ── DETAIL ──
 async function openDet(item){
   if(!item) return;
@@ -3512,10 +3816,13 @@ async function openDet(item){
         </button>
       </div>
       <div class="det-pills" id="detPills">
-        <span class="det-pill sk" style="width:50px;height:22px">&nbsp;</span>
-        <span class="det-pill sk" style="width:70px;height:22px">&nbsp;</span>
+        <span class="det-pill sk" style="width:52px;height:22px">&nbsp;</span>
+        <span class="det-pill sk" style="width:44px;height:22px">&nbsp;</span>
+        <span class="det-pill sk" style="width:58px;height:22px">&nbsp;</span>
+        <span class="det-pill sk" style="width:40px;height:22px">&nbsp;</span>
+        <span class="det-pill sk" style="width:48px;height:22px">&nbsp;</span>
       </div>
-      <div class="det-overview sk" id="detOverview" style="height:80px;border-radius:4px"></div>
+      <div class="det-overview sk" id="detOverview"></div>
       <button class="det-overview-toggle" id="detOverviewToggle" onclick="toggleOverview()">
         <span id="detOverviewToggleText">展开</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -3529,19 +3836,39 @@ async function openDet(item){
         <div class="pan-tabs-row" id="panTabs"></div>
         <div class="pan-list" id="panList"></div>
       </div>
-      <div id="detCast"></div>
+      <div id="detCast" class="det-sk-block">
+        <div class="det-sk-label"></div>
+        <div class="det-sk-cast"><div class="det-sk-cast-item"><div class="det-sk-avatar"></div><div class="det-sk-line n"></div><div class="det-sk-line c"></div></div><div class="det-sk-cast-item"><div class="det-sk-avatar"></div><div class="det-sk-line n"></div><div class="det-sk-line c"></div></div><div class="det-sk-cast-item"><div class="det-sk-avatar"></div><div class="det-sk-line n"></div><div class="det-sk-line c"></div></div><div class="det-sk-cast-item"><div class="det-sk-avatar"></div><div class="det-sk-line n"></div><div class="det-sk-line c"></div></div><div class="det-sk-cast-item"><div class="det-sk-avatar"></div><div class="det-sk-line n"></div><div class="det-sk-line c"></div></div><div class="det-sk-cast-item"><div class="det-sk-avatar"></div><div class="det-sk-line n"></div><div class="det-sk-line c"></div></div><div class="det-sk-cast-item"><div class="det-sk-avatar"></div><div class="det-sk-line n"></div><div class="det-sk-line c"></div></div><div class="det-sk-cast-item"><div class="det-sk-avatar"></div><div class="det-sk-line n"></div><div class="det-sk-line c"></div></div></div>
+      </div>
       <div id="detPersonWorks" style="display:none"></div>
-      <div id="detRecs"></div>
+      <div id="detRecs" class="det-sk-block">
+        <div class="det-sk-label" style="width:72px"></div>
+        <div class="det-sk-recs"><div class="det-sk-card"></div><div class="det-sk-card"></div><div class="det-sk-card"></div><div class="det-sk-card"></div><div class="det-sk-card"></div><div class="det-sk-card"></div></div>
+      </div>
     </div>`;
 
   panel.classList.add('on');
   try{ _enterFullscreen(); }catch(e){}
+  // 取消上一页「等待盘搜」轮询，并清掉上一部的盘搜结果，避免三角仍绿
+  try{ _detPlayWaitToken = (_detPlayWaitToken||0) + 1; }catch(e0){}
+  try{
+    if(panState.keyword !== title){
+      resetPanState();
+    }
+  }catch(e0){}
+  try{
+    const pb=document.getElementById('detPlayBtn');
+    if(pb){ pb.classList.remove('ready'); pb.disabled=false; pb.classList.add('btn-p'); pb.classList.remove('btn-s'); }
+    const pt=document.getElementById('detPlayText');
+    if(pt) pt.textContent='播放';
+  }catch(e){}
 
   // 继续观看：拉历史匹配（并行，不阻塞详情加载）
   _checkDetContinue(item);
 
   // ── 后台静默盘搜：载入详情页自动开始，不展开面板 ──
   _bgPanSearch(title);
+  try{ _syncPlayBtnReady(); }catch(e1){}
 
   // Load full details
   try{
@@ -3625,6 +3952,7 @@ async function openDet(item){
     if(ovEl){
       ovEl.className='det-overview clamped';
       ovEl.style='';
+      ovEl.classList.remove('sk');
       ovEl.textContent=overview;
       if(ovToggle){
         ovToggle.classList.remove('show','open');
@@ -3643,12 +3971,17 @@ async function openDet(item){
     const castData = d.status==='fulfilled' && d.value.credits ? d.value.credits
                    : credits.status==='fulfilled' ? credits.value : null;
     const castList = ((castData && castData.cast)||[]).filter(c=>c.profile_path).slice(0,16);
-    if(castList.length){
+    {
       const castEl = document.getElementById('detCast');
-      if(castEl){
+      if(castEl && !castList.length){
+        castEl.classList.remove('det-sk-block');
+        castEl.innerHTML = '';
+        castEl.style.minHeight = '0';
+      } else if(castList.length && castEl){
         // 存演员数据
         window._CAST_MAP = {};
         castList.forEach(c=>{ window._CAST_MAP[String(c.id)] = c; });
+        castEl.classList.remove('det-sk-block');
         castEl.innerHTML = `
           <div class="det-sec-label">主演</div>
           <div class="det-cast-wrap"><div class="det-cast-rail">${castList.map(c=>`
@@ -3678,12 +4011,19 @@ async function openDet(item){
     const recItems = (recs.status==='fulfilled' ? ((recs.value && recs.value.results)||[]) : []).slice(0,12);
     recItems.forEach(i=>ITEMS[i.id]=i);
     const recsEl = document.getElementById('detRecs');
-    if(recItems.length && recsEl){
-      recsEl.innerHTML = `
-        <div class="det-recs-label">猜你喜欢</div>
-        <div class="det-recs-grid" id="detRecsGrid">${recItems.map(i=>cardHtml(i)).join('')}</div>`;
-      lazyObserveImg(recsEl);
-      requestAnimationFrame(()=>requestAnimationFrame(updateRecsGrid));
+    if(recsEl){
+      if(recItems.length){
+        recsEl.classList.remove('det-sk-block');
+        recsEl.innerHTML = `
+          <div class="det-recs-label">猜你喜欢</div>
+          <div class="det-recs-grid" id="detRecsGrid">${recItems.map(i=>cardHtml(i)).join('')}</div>`;
+        lazyObserveImg(recsEl);
+        requestAnimationFrame(()=>requestAnimationFrame(updateRecsGrid));
+      } else {
+        recsEl.classList.remove('det-sk-block');
+        recsEl.innerHTML = '';
+        recsEl.style.minHeight = '0';
+      }
     }
   }catch(e){
     console.warn('detail load failed', e);
@@ -3854,7 +4194,7 @@ function updateHomeRails(){
   else               { lcols=2; }
   const cardWLand = Math.floor((vw - gut*2 - gut*(lcols-1)) / lcols);
 
-  ['g-new','g-movie','g-top','g-doc','g-ani'].forEach(id=>{
+  ['g-continue','g-new','g-movie','g-top','g-doc','g-ani'].forEach(id=>{
     const g = document.getElementById(id);
     if(g) g.style.setProperty('--card-w', cardW+'px');
   });
@@ -3871,6 +4211,7 @@ function _doCloseDet(){
   panel.style.removeProperty('--det-hero-bg');
   _clearDetBackdrop();  // 停止背景剧照轮播
   _detContinueItem = null;
+  try{ renderContinueWatch(); }catch(e){}
   setTimeout(()=>{ panel.scrollTop=0; document.getElementById('detInner').innerHTML=''; }, 300);
   // 不清 playbackReturn，保留给重新打开盘搜时复原用
   resetPanState();
@@ -3967,6 +4308,24 @@ window.addEventListener('popstate', (e)=>{
   _resumeHomeHero();
 });
 
+
+// 播放钮：文案固定「播放」；盘搜有结果后三角变绿，表示可直接播
+function _syncPlayBtnReady(){
+  const btn = document.getElementById('detPlayBtn');
+  const txt = document.getElementById('detPlayText');
+  if(!btn) return;
+  const title = detData ? String(detData.title||detData.name||'').trim() : '';
+  // 必须是当前影片的盘搜结果，才点亮三角（避免切详情后仍绿）
+  const panMatch = !!(title && panState.keyword === title && panState.results && panState.results.length);
+  const cw = detData ? getContinueWatch(detData.id) : null;
+  const canResume = !!(cw && cw.url) || !!_detContinueItem;
+  btn.classList.toggle('ready', !!(panMatch || canResume));
+  if(txt){
+    if(txt.textContent === '准备中…' || txt.textContent === '搜索中…') return;
+    txt.textContent = canResume ? '续播' : '播放';
+  }
+}
+
 // ── 后台静默盘搜 ──
 // 只启动搜索、不展开 panBlock 面板；结果存入 panState 供 detPlay() 直接消费
 function _bgPanSearch(kw){
@@ -4022,45 +4381,71 @@ function detPlayPressEnd(e){
 function detPlayLongPress(e){ e.preventDefault(); }
 
 // ── 单击：播放盘搜最高画质资源 ──
+let _detPlayWaitToken = 0;
 function detPlay(){
   if(!detData) return;
   if(!window.fm){ toast('播放功能需在 App 内使用'); return; }
 
-  // 有盘搜结果 → 取排名第一的直接播放
-  if(panState.results && panState.results.length > 0){
+  const curTitle = String(detData.title||detData.name||'').trim();
+
+  // 本站续播：有上次保存的盘链则直接播
+  try{
+    const cw = getContinueWatch(detData.id);
+    if(cw && cw.url){
+      playPanResult({
+        diskType: cw.panType || 'quark',
+        url: cw.url,
+        password: cw.password || '',
+        title: cw.panTitle || cw.title || ''
+      });
+      return;
+    }
+  }catch(e){}
+
+  // App 历史续播（原「继续观看」合进主按钮，不再单独占一钮）
+  if(_detContinueItem && _detContinueItem.siteKey && _detContinueItem.vodId){
+    detContinue();
+    return;
+  }
+
+  // 仅当盘搜结果属于当前影片时才直接播（防止串片）
+  if(panState.results && panState.results.length > 0 && panState.keyword === curTitle){
     _playTopPanResult();
     return;
   }
 
-  // 结果还在加载中 → 等待最多 6 秒
-  if(panState.loading){
+  // 结果还在加载中 → 短等盘搜；超时不跳全局 App 搜索（长按才全局搜）
+  if(panState.loading && panState.keyword === curTitle){
     const btn = document.getElementById('detPlayBtn');
     const txt = document.getElementById('detPlayText');
-    if(txt) txt.textContent = '搜索中…';
+    if(txt) txt.textContent = '准备中…';
     if(btn) btn.disabled = true;
+    const token = ++_detPlayWaitToken;
     let waited = 0;
     const poll = setInterval(()=>{
+      if(token !== _detPlayWaitToken){ clearInterval(poll); return; }
       waited += 300;
-      if(panState.results && panState.results.length > 0){
+      if(panState.results && panState.results.length > 0 && panState.keyword === curTitle){
         clearInterval(poll);
         if(btn) btn.disabled = false;
         if(txt) txt.textContent = '播放';
+        try{ _syncPlayBtnReady(); }catch(e){}
         _playTopPanResult();
-      } else if(!panState.loading || waited >= 6000){
+      } else if(!panState.loading || waited >= 8000){
         clearInterval(poll);
         if(btn) btn.disabled = false;
         if(txt) txt.textContent = '播放';
-        if(waited >= 6000 || !panState.loading){
-          // 盘搜无结果，降级到原生搜索播放
-          _fallbackSearch();
-        }
+        try{ _syncPlayBtnReady(); }catch(e){}
+        toast('暂无可用资源，长按可全局搜索');
       }
     }, 300);
     return;
   }
 
-  // 盘搜未启动或无结果，降级到原生搜索播放
-  _fallbackSearch();
+  // 盘搜未就绪：只提示，不触发全局搜索
+  toast('资源未就绪，请稍候或长按全局搜索');
+  // 若尚未发起盘搜，补一次静默搜
+  try{ if(curTitle) _bgPanSearch(curTitle); }catch(e){}
 }
 
 // 取排序第一条（排序逻辑与 renderPanUI 一致）播放
@@ -4148,8 +4533,8 @@ function _playTopPanResult(sortedCandidates, _tryIndex){
   }
   const best = sortedCandidates[idx];
   if(!best){
-    // 首次就没有可播的三网盘资源 → 降级原生搜索播放；换源到底则提示
-    if(idx === 0) _fallbackSearch();
+    // 单击不走全局搜索；无可用盘源只提示（长按才全局搜）
+    if(idx === 0) toast('暂无可用网盘资源，长按可全局搜索');
     else toast('所有资源均无法播放');
     return;
   }
@@ -4249,29 +4634,27 @@ function _historyMatches(item, h){
   });
 }
 
-// 详情页打开后：拉历史，匹配则显示「继续观看」
+// 详情页打开后：匹配 App 历史仅记入 _detContinueItem，不单独出第三颗按钮
+// 主按钮统一显示「续播 / 播放」，避免「继续观看 + 搜索 + 盘搜」三钮并排
 async function _checkDetContinue(item){
   _detContinueItem = null;
   const btn = document.getElementById('detContinueBtn');
-  const playText = document.getElementById('detPlayText');
-  if(btn) btn.style.display = 'none';
-  if(playText) playText.textContent = '搜索播放';
-  if(!window.fm) return;  // 浏览器预览无历史
+  if(btn) btn.style.display = 'none';  // 永远隐藏，续播走主播放钮
+  const playBtn = document.getElementById('detPlayBtn');
+  if(playBtn){ playBtn.classList.add('btn-p'); playBtn.classList.remove('btn-s'); }
+  try{ _syncPlayBtnReady(); }catch(e){}
+  if(!window.fm) return;
   try{
     const list = await sdk().history();
-    if(detData !== item) return;  // 已切换影片
+    if(detData !== item) return;
     const arr = (Array.isArray(list) ? list : [])
       .slice()
       .sort((a,b)=>Number(b&&b.createTime||0)-Number(a&&a.createTime||0));
     const match = arr.find(h=>_historyMatches(item, h));
-    if(!match) return;
+    if(!match){ try{ _syncPlayBtnReady(); }catch(e){} return; }
     _detContinueItem = _historyParts(match);
-    if(btn) btn.style.display = '';
-    // 命中续播时，搜索按钮降级为「搜索」+ 次要样式
-    if(playText) playText.textContent = '搜索';
-    const playBtn = document.getElementById('detPlayBtn');
-    if(playBtn){ playBtn.classList.remove('btn-p'); playBtn.classList.add('btn-s'); }
-  }catch(e){ /* 历史读取失败，保持搜索播放 */ }
+    try{ _syncPlayBtnReady(); }catch(e){}
+  }catch(e){}
 }
 
 function detContinue(){
@@ -4632,6 +5015,7 @@ async function doSearchPan(kw){
     const results = applyPanBody(body, kw);
     updateConnStatus('pan', results.length ? '找到 '+results.length+' 条' : '无资源');
     renderPanUI();
+    try{ _syncPlayBtnReady(); }catch(e){}
     // 轮询两次补充结果
     [4500, 9000].forEach((delay,i)=>{
       const t = setTimeout(()=>pollPan(token, kw, i+1), delay);
@@ -4645,6 +5029,7 @@ async function doSearchPan(kw){
     updateConnStatus('pan','搜索失败');
   }finally{
     if(panState.viewToken===token) panState.loading=false;
+    try{ _syncPlayBtnReady(); }catch(e){}
   }
 }
 
@@ -4661,6 +5046,7 @@ async function pollPan(token, kw, round){
     const added = results.length - before;
     updateConnStatus('pan', added>0 ? `新增${added}条共${results.length}` : `已更新${results.length}条`);
     renderPanUI();
+    try{ _syncPlayBtnReady(); }catch(e){}
   }catch(e){ if(panState.viewToken===token) updateConnStatus('pan','更新失败'); }
 }
 
@@ -5056,6 +5442,8 @@ async function playPanResult(item){
     const pan = sdk().pan || {};
     console.log('[Eclipse] pan.play exists =', typeof pan.play);
     if(typeof pan.play !== 'function') throw new Error('当前 App 不支持 pan.play（' + typeof pan.play + '）');
+    // 点播放即记入本站「继续观看」，并保存当前链接供续播
+    try{ recordContinueFromDet(item); }catch(e0){}
     await pan.play(payload);
     toast('已交给原生播放');
   }catch(e){
@@ -5922,6 +6310,6 @@ window.addEventListener('fmviewport', function(e){
 
 boot();
 </script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"a866d1d793064965be308d7a818e3f78","r":1}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"a866d1d793064965be308d7a818e3f78","r":1,"spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
